@@ -1,6 +1,7 @@
 (ns clj-http.client
   "Batteries-included HTTP client."
   (:import (java.net URL))
+  (:import (org.apache.http.client.params CookiePolicy ClientPNames))
   (:require [clojure.contrib.string :as str])
   (:require [clj-http.core :as core])
   (:require [clj-http.util :as util])
@@ -156,6 +157,14 @@
       (client (-> req (dissoc :url) (merge (parse-url url))))
       (client req))))
 
+(defn wrap-http-params [client]
+  (fn [req]
+    (if-let [http-params (:http-params req)]
+      (client (-> req (dissoc :http-params)
+                      (assoc :http-params (merge {ClientPNames/COOKIE_POLICY
+                                                  CookiePolicy/BROWSER_COMPATIBILITY}
+                                                 http-params))))
+      (client req))))
 
 (def #^{:doc
   "Executes the HTTP request corresponding to the given map and returns the
@@ -190,6 +199,7 @@
     wrap-accept-encoding
     wrap-content-type
     wrap-method
+    wrap-http-params
     wrap-url))
 
 (defn get
