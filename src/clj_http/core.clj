@@ -18,13 +18,15 @@
    Note that where Ring uses InputStreams for the request and response bodies,
    the clj-http uses ByteArrays for the bodies."
   [{:keys [request-method scheme server-name server-port uri query-string
-           headers content-type character-encoding body]}]
+           headers content-type character-encoding http-params body]}]
   (let [http-client (DefaultHttpClient.)]
     (try
       (-> http-client
         (.getParams)
         (.setParameter ClientPNames/COOKIE_POLICY
                       CookiePolicy/BROWSER_COMPATIBILITY))
+      (doseq [param http-params]
+        (.. http-client (getParams) (setParameter (first param) (last param))))
       (let [http-url (str scheme "://" server-name
                           (if server-port (str ":" server-port))
                           uri
