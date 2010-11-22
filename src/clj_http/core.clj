@@ -1,5 +1,6 @@
 (ns clj-http.core
   "Core HTTP request/response implementation."
+  (:import (clj_http LoggingRedirectHandler))
   (:import (org.apache.http HttpRequest HttpEntityEnclosingRequest HttpResponse Header))
   (:import (org.apache.http.util EntityUtils))
   (:import (org.apache.http.entity ByteArrayEntity))
@@ -18,8 +19,10 @@
    the clj-http uses ByteArrays for the bodies."
   [{:keys [request-method scheme server-name server-port uri query-string
            headers content-type character-encoding http-params body]}]
-  (let [http-client (DefaultHttpClient.)]
+  (let [http-client (DefaultHttpClient.)
+        redirect-handler (LoggingRedirectHandler.)]
     (try
+      (.setRedirectHandler http-client redirect-handler)
       (doseq [param http-params]
         (.. http-client (getParams) (setParameter (first param) (last param))))
       (let [http-url (str scheme "://" server-name
@@ -48,6 +51,7 @@
               http-entity (.getEntity http-resp)
               resp {:status (.getStatusCode (.getStatusLine http-resp))
                     :headers (parse-headers http-resp)
-                    :body (if http-entity (EntityUtils/toByteArray http-entity))}]
+                    :body (if http-entity (EntityUtils/toByteArray http-entity))
+                    :redirect-uris (into #{} (.getURIs redirect-handler))}]
           (.shutdown (.getConnectionManager http-client))
           resp)))))
