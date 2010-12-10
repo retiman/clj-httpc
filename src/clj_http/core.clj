@@ -1,6 +1,8 @@
 (ns clj-http.core
   "Core HTTP request/response implementation."
+  (:require [clj-http.content :as content])
   (:import (clj_http LoggingRedirectHandler))
+  (:import (java.net SocketException))
   (:import (org.apache.http HttpRequest HttpEntityEnclosingRequest HttpResponse Header))
   (:import (org.apache.http.util EntityUtils))
   (:import (org.apache.http.entity ByteArrayEntity))
@@ -10,6 +12,14 @@
 (defn- parse-headers [#^HttpResponse http-resp]
   (into {} (map (fn [#^Header h] [(.toLowerCase (.getName h)) (.getValue h)])
                 (iterator-seq (.headerIterator http-resp)))))
+
+(defn- acceptable-content?
+  "Returns true if the response's Content-Type matches any of the Accept
+  headers."
+  [headers resp]
+  (let [acceptable-types (content/parse-accept headers)
+        content-type (content/get-type resp)]
+    (content/matches? acceptable-types content-type)))
 
 (defn request
   "Executes the HTTP request corresponding to the given Ring request map and
@@ -49,9 +59,14 @@
             (.setEntity #^HttpEntityEnclosingRequest http-req http-body)))
         (let [http-resp (.execute http-client http-req)
               http-entity (.getEntity http-resp)
+              body (if (and http-entity (acceptable-content? headers http-resp))
+                     (EntityUtils/toByteArray http-entity)
+                     (try
+                       (.abort http-req)
+                       (catch SocketException e nil)))
               resp {:status (.getStatusCode (.getStatusLine http-resp))
                     :headers (parse-headers http-resp)
-                    :body (if http-entity (EntityUtils/toByteArray http-entity))
+                    :body body
                     :redirect-uris (into #{} (.getURIs redirect-handler))}]
           (.shutdown (.getConnectionManager http-client))
           resp)))))
