@@ -2,6 +2,8 @@
 
 A Clojure HTTP library thinly wrapping the [Apache HttpComponents](http://hc.apache.org/) client.  This repository is forked from [clj-http](http://hc.apache.org); it will try to allow you to access the wrapped HttpComponents library if you need to.
 
+NOTE: ALL APIs ARE SUBJECT TO CHANGE WITHOUT NOTICE.
+
 Thanks go to the [clj-sys](https://github.com/clj-sys) guys for writing the original implementation.
 
 ## Features
