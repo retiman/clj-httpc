@@ -85,7 +85,7 @@ The client in `clj-httpc.core` makes HTTP requests according to a given Ring req
 To run the tests:
 
     $ lein deps
-    $ lein run -m clj-httpc.server
+    $ lein run clj-httpc.run-server -main
     $ lein test
 
 ## License
