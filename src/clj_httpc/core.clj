@@ -1,6 +1,6 @@
-(ns clj-http.core
+(ns clj-httpc.core
   "Core HTTP request/response implementation."
-  (:require [clj-http.content :as content])
+  (:require [clj-httpc.content :as content])
   (:import (clj_http LoggingRedirectHandler))
   (:import (java.net SocketException))
   (:import (org.apache.http HttpRequest HttpEntityEnclosingRequest HttpResponse Header))
@@ -26,7 +26,7 @@
    returns the Ring response map corresponding to the resulting HTTP response.
 
    Note that where Ring uses InputStreams for the request and response bodies,
-   the clj-http uses ByteArrays for the bodies."
+   the clj-httpc uses ByteArrays for the bodies."
   [{:keys [request-method scheme server-name server-port uri query-string
            headers content-type character-encoding http-params body]}]
   (let [http-client (DefaultHttpClient.)

@@ -1,7 +1,7 @@
-(ns clj-http.client-test
+(ns clj-httpc.client-test
   (:use clojure.test)
-  (:require [clj-http.client :as client])
-  (:require [clj-http.util :as util])
+  (:require [clj-httpc.client :as client])
+  (:require [clj-httpc.util :as util])
   (:import (java.util Arrays)))
 
 (def base-req

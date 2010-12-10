@@ -1,4 +1,4 @@
-package clj_http;
+package clj_httpc;
 
 import java.lang.reflect.Field;
 import java.net.URI;

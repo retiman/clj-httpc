@@ -1,9 +1,9 @@
-(ns clj-http.core-test
+(ns clj-httpc.core-test
   (:use clojure.test)
   (:require [clojure.contrib.pprint :as pp])
   (:require [clojure.contrib.io :as io])
-  (:require [clj-http.core :as core])
-  (:require [clj-http.util :as util]))
+  (:require [clj-httpc.core :as core])
+  (:require [clj-httpc.util :as util]))
 
 (defn handler [req]
   (pp/pprint req)

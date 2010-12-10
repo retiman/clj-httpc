@@ -1,4 +1,4 @@
-(ns clj-http.content
+(ns clj-httpc.content
   "Utilities for content type handling."
   (:require [clojure.contrib.str-utils2 :as su])
   (:import [com.google.gdata.util ContentType]))

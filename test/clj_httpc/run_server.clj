@@ -1,10 +1,10 @@
-(ns clj-http.run-server
+(ns clj-httpc.run-server
   (:use ring.adapter.jetty)
   (:use ring.middleware.reload)
-  (:use clj-http.core-test))
+  (:use clj-httpc.core-test))
 
 (defn -main [& args]
   (println "booting test server")
   (run-jetty
-    (-> #'handler (wrap-reload '(clj-http.core-test)))
+    (-> #'handler (wrap-reload '(clj-httpc.core-test)))
     {:port 8080}))
