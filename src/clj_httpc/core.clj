@@ -1,7 +1,7 @@
 (ns clj-httpc.core
   "Core HTTP request/response implementation."
   (:require [clj-httpc.content :as content])
-  (:import (clj_http LoggingRedirectHandler))
+  (:import (clj_httpc LoggingRedirectHandler))
   (:import (java.net SocketException))
   (:import (org.apache.http HttpRequest HttpEntityEnclosingRequest HttpResponse Header))
   (:import (org.apache.http.util EntityUtils))
@@ -28,7 +28,8 @@
    Note that where Ring uses InputStreams for the request and response bodies,
    the clj-httpc uses ByteArrays for the bodies."
   [{:keys [request-method scheme server-name server-port uri query-string
-           headers content-type character-encoding http-params body]}]
+           headers content-type character-encoding http-params body
+           ignore-body? timeout-body?]}]
   (let [http-client (DefaultHttpClient.)
         redirect-handler (LoggingRedirectHandler.)]
     (try
@@ -59,11 +60,11 @@
             (.setEntity #^HttpEntityEnclosingRequest http-req http-body)))
         (let [http-resp (.execute http-client http-req)
               http-entity (.getEntity http-resp)
-              body (if (and http-entity (acceptable-content? headers http-resp))
-                     (EntityUtils/toByteArray http-entity)
+              body (if (and ignore-body? (not (acceptable-content? headers http-resp)))
                      (try
                        (.abort http-req)
-                       (catch SocketException e nil)))
+                       (catch SocketException e nil))
+                     (if http-entity (EntityUtils/toByteArray http-entity)))
               resp {:status (.getStatusCode (.getStatusLine http-resp))
                     :headers (parse-headers http-resp)
                     :body body
