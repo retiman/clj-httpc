@@ -15,6 +15,9 @@
       {:status 200}
     [:get "/content-type"]
       {:status 200 :body (:content-type req)}
+    [:get "/content"]
+      {:status 200 :body "hello" :headers {"Content-Type" "text/plain"
+                                           "Content-Length" "1000"}}
     [:get "/header"]
       {:status 200 :body (get-in req [:headers "x-my-header"])}
     [:post "/post"]
@@ -71,3 +74,50 @@
 (deftest returns-status-on-exceptional-responses
   (let [resp (request {:request-method :get :uri "/error"})]
     (is (= 500 (:status resp)))))
+
+(deftest aborts-on-non-matching-content-type
+  (let [resp (request {:request-method :get
+                       :uri "/content"
+                       :headers {"Accept" "application/json"}
+                       :ignore-body? true})]
+    (is (= nil (:body resp)))))
+
+(deftest proceeds-on-matching-content-type
+  (let [resp (request {:request-method :get
+                       :uri "/content"
+                       :headers {"Accept" "text/*"}
+                       :ignore-body? true})]
+    (is (= "hello\n" (slurp-body resp)))))
+
+(deftest aborts-on-content-length-over-limit
+  (let [resp (request {:request-method :get
+                       :uri "/content"
+                       :max-content-length 1
+                       :ignore-body? true})]
+    (is (= nil (:body resp)))))
+
+(deftest proceeds-on-content-length-within-limit
+  (do
+    (let [resp (request {:request-method :get
+                         :uri "/content"
+                         :max-content-length 1000
+                         :ignore-body? true})]
+      (is (= "hello\n" (slurp-body resp))))
+    (let [resp (request {:request-method :get
+                         :uri "/content"
+                         :max-content-length 1001
+                         :ignore-body? true})]
+      (is (= "hello\n" (slurp-body resp))))))
+
+(deftest proceeds-without-ignoring-body
+  (do
+    (let [resp (request {:request-method :get
+                         :uri "/content"
+                         :headers {"Accept" "application/json"}
+                         :ignore-body? false})]
+      (is (= "hello\n" (slurp-body resp))))
+    (let [resp (request {:request-method :get
+                         :uri "/content"
+                         :max-content-length 1
+                         :ignore-body? false})]
+      (is (= "hello\n" (slurp-body resp))))))
