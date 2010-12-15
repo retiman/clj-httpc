@@ -1,10 +1,10 @@
 (ns clj-httpc.client
   "Batteries-included HTTP client."
-  (:import (java.net URL))
-  (:import (org.apache.http.client.params CookiePolicy ClientPNames))
-  (:require [clojure.contrib.string :as str])
-  (:require [clj-httpc.core :as core])
-  (:require [clj-httpc.util :as util])
+  (:require [clojure.contrib.string :as str]
+            [clj-httpc.core :as core]
+            [clj-httpc.util :as util])
+  (:import [java.net URL]
+           [org.apache.http.client.params CookiePolicy ClientPNames])
   (:refer-clojure :exclude (get)))
 
 (defn update [m k f & args]

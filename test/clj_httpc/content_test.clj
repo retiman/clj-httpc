@@ -1,6 +1,5 @@
 (ns clj-httpc.content-test
-  (:use [clj-httpc.content]
-        [clojure.test])
+  (:use [clojure.test])
   (:require [clj-httpc.content :as content])
   (:import [com.google.gdata.util ContentType]
            [org.apache.http ProtocolVersion]
@@ -25,21 +24,21 @@
 (deftest gets-content-type
   (let [entity (create-entity "text/html" nil)
         resp (create-response 200 entity)
-        content-type (get-type resp)
+        content-type (content/get-type resp)
         accepted (ContentType/TEXT_HTML)]
     (is (.match content-type accepted))))
 
 (deftest parses-accept-headers
   (do
     (let [headers {}]
-      (is (parse-accept headers) [(ContentType. "*/*")]))
+      (is (content/parse-accept headers) [(ContentType. "*/*")]))
     (let [headers {"Accept" (str "multipart/mixed; boundary=\"frontier\","
                                  "text/*;q=0.3,"
                                  "text/html;q=0.7,"
                                  "text/html;level=1,"
                                  "text/html;level=2;q=0.4,"
                                  "*/*;q=0.5")}]
-      (is (parse-accept headers)
+      (is (content/parse-accept headers)
           [(ContentType. "multipart/mixed; boundary=\"frontier\"")
            (ContentType. "text/*;q=0.3,")
            (ContentType. "text/html;q=0.7,")
@@ -47,17 +46,17 @@
            (ContentType. "text/html;level=2;q=0.4,")
            (ContentType. "*/*;q=0.5")])
     (let [headers {"Accept" "text/*"}]
-      (is (parse-accept headers) [(ContentType. "text/*")])))))
+      (is (content/parse-accept headers) [(ContentType. "text/*")])))))
 
 (deftest matches-acceptable-content-types
   (do
     (let [acceptable (map #(ContentType. %)
                           ["text/html" "application/json" "text/plain"])
           content-type (ContentType. "application/json")]
-      (is (matches? acceptable content-type)))
+      (is (content/matches? acceptable content-type)))
     (let [acceptable (map #(ContentType. %) ["text/*"])
           content-type (ContentType. "text/xml")]
-      (is (matches? acceptable content-type)))
+      (is (content/matches? acceptable content-type)))
     (let [acceptable []
           content-type (ContentType. "application/json")]
-      (is (not (matches? acceptable content-type))))))
+      (is (not (content/matches? acceptable content-type))))))

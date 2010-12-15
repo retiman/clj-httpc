@@ -1,16 +1,15 @@
 (ns clj-httpc.core
   "Core HTTP request/response implementation."
   (:require [clj-httpc.content :as content])
-  (:import (clj_httpc LoggingRedirectHandler))
-  (:import (java.net SocketException))
-  (:import (org.apache.http HttpRequest HttpEntityEnclosingRequest HttpResponse Header HttpVersion))
-  (:import (org.apache.http.util EntityUtils))
-  (:import (org.apache.http.params BasicHttpParams HttpProtocolParams HttpConnectionParams))
-  (:import (org.apache.http.entity ByteArrayEntity))
-  (:import (org.apache.http.client.methods HttpGet HttpHead HttpPut HttpPost HttpDelete))
-  (:import (org.apache.http.impl.client DefaultHttpClient))
-  (:import (org.apache.http.protocol HTTP))
-  )
+  (:import [clj_httpc LoggingRedirectHandler]
+           [java.net SocketException]
+           [org.apache.http HttpRequest HttpEntityEnclosingRequest HttpResponse Header HttpVersion]
+           [org.apache.http.util EntityUtils]
+           [org.apache.http.params BasicHttpParams HttpProtocolParams HttpConnectionParams]
+           [org.apache.http.entity ByteArrayEntity]
+           [org.apache.http.client.methods HttpGet HttpHead HttpPut HttpPost HttpDelete]
+           [org.apache.http.impl.client DefaultHttpClient]
+           [org.apache.http.protocol HTTP]))
 
 (defn- parse-headers [#^HttpResponse http-resp]
   (into {} (map (fn [#^Header h] [(.toLowerCase (.getName h)) (.getValue h)])
