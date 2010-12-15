@@ -24,7 +24,7 @@
     (HttpProtocolParams/setUseExpectContinue true)
     (HttpConnectionParams/setTcpNoDelay true)
     (HttpConnectionParams/setSocketBufferSize 8192)
-    (HttpProtocolParams/setUserAgent "clj-httpc/1.0.0")))
+    (HttpProtocolParams/setUserAgent "clj-httpc")))
 
 (defn- default-client []
   (proxy [DefaultHttpClient] []
