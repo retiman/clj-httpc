@@ -15,14 +15,6 @@
   (into {} (map (fn [#^Header h] [(.toLowerCase (.getName h)) (.getValue h)])
                 (iterator-seq (.headerIterator http-resp)))))
 
-(defn- acceptable-content?
-  "Returns true if the response's Content-Type matches any of the Accept
-  headers."
-  [headers resp]
-  (let [acceptable-types (content/parse-accept headers)
-        content-type (content/get-type resp)]
-    (content/matches? acceptable-types content-type)))
-
 (defn- create-http-params
   "A better way to get your default params (without jar introspection)"
   []
@@ -77,7 +69,9 @@
             (.setEntity #^HttpEntityEnclosingRequest http-req http-body)))
         (let [http-resp (.execute http-client http-req)
               http-entity (.getEntity http-resp)
-              body (if (and ignore-body? (not (acceptable-content? headers http-resp)))
+              body (if (and ignore-body?
+                            (not (content/matches-acceptable? headers
+                                                              http-resp)))
                      (try
                        (.abort http-req)
                        (catch SocketException e nil))

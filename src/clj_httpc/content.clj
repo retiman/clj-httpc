@@ -27,3 +27,11 @@
   (if (nil? content-type)
     true
     (some #(.match content-type %) acceptable-types)))
+
+(defn matches-acceptable?
+  "Returns true if the response's Content-Type matches any of the Accept
+  headers."
+  [headers resp]
+  (let [acceptable-types (parse-accept headers)
+        content-type (get-type resp)]
+    (matches? acceptable-types content-type)))
