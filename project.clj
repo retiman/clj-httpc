@@ -1,4 +1,4 @@
-(defproject clj-httpc "1.0.1-SNAPSHOT"
+(defproject clj-httpc "1.0.0-SNAPSHOT"
   :description
     "A Clojure HTTP library wrapping the Apache HttpComponents client."
   :java-source-path [["src"] ["test"]]
