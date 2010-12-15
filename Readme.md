@@ -13,7 +13,7 @@ These features are added on top of (or will be added on top of) `clj-http`:
 - Allows user to specify HttpParams to underlying HttpClient
 - Logs all redirects
 - Aborts downloading of response body if content types don't match
-- Aborts downloading of response body if content length is too long (even if length isn't known beforehand)
+- Aborts downloading of response body if content length is too long
 
 ## Usage
 

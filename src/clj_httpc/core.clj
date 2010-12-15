@@ -1,6 +1,6 @@
 (ns clj-httpc.core
   "Core HTTP request/response implementation."
-  (:require [clj-httpc.content :as content])
+  (:require [clj-httpc.content :as c])
   (:import [clj_httpc LoggingRedirectHandler]
            [java.net SocketException]
            [org.apache.http HttpRequest HttpEntityEnclosingRequest HttpResponse Header HttpVersion]
@@ -38,7 +38,7 @@
    the clj-httpc uses ByteArrays for the bodies."
   [{:keys [request-method scheme server-name server-port uri query-string
            headers content-type character-encoding http-params body
-           ignore-body? timeout-body?]}]
+           ignore-body? max-content-length]}]
   (let [http-client (default-client)
         redirect-handler (LoggingRedirectHandler.)]
     (try
@@ -70,8 +70,8 @@
         (let [http-resp (.execute http-client http-req)
               http-entity (.getEntity http-resp)
               body (if (and ignore-body?
-                            (not (content/matches-acceptable? headers
-                                                              http-resp)))
+                            (or (not (c/matches-acceptable? headers http-resp))
+                                (c/over-limit? http-resp max-content-length)))
                      (try
                        (.abort http-req)
                        (catch SocketException e nil))

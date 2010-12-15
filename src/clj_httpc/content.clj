@@ -35,3 +35,11 @@
   (let [acceptable-types (parse-accept headers)
         content-type (get-type resp)]
     (matches? acceptable-types content-type)))
+
+(defn over-limit?
+  "Returns true if response's Content-Length is too long."
+  [resp limit]
+  (let [entity (.getEntity resp)]
+    (and entity
+         limit
+         (> (.getContentLength entity) limit))))

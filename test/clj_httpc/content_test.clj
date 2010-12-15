@@ -16,13 +16,14 @@
       (.setEntity entity))))
 
 (defn- create-entity
-  [type content]
+  [type content length]
   (doto (BasicHttpEntity.)
     (.setContent content)
-    (.setContentType type)))
+    (.setContentType type)
+    (.setContentLength length)))
 
 (deftest gets-content-type
-  (let [entity (create-entity "text/html" nil)
+  (let [entity (create-entity "text/html" nil 0)
         resp (create-response 200 entity)
         content-type (content/get-type resp)
         accepted (ContentType/TEXT_HTML)]
@@ -60,3 +61,15 @@
     (let [acceptable []
           content-type (ContentType. "application/json")]
       (is (not (content/matches? acceptable content-type))))))
+
+(deftest reports-over-limit?
+  (do
+    (let [entity (create-entity "text/html" nil 1000)
+          resp (create-response 200 entity)
+          limit 1000]
+      (is (not (content/over-limit? resp limit))))
+    (let [entity (create-entity "text/html" nil 1000)
+          resp (create-response 200 entity)
+          limit 100]
+      (is (content/over-limit? resp limit)))))
+
