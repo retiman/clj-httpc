@@ -1,7 +1,7 @@
 (defproject clj-httpc "1.0.0"
   :description
     "A Clojure HTTP library wrapping the Apache HttpComponents client."
-  :java-source-path [["src"] ["test"]]
+  :java-source-path "src"
   :repositories {"lousycoder.com" "http://maven.lousycoder.com"}
   :dependencies
     [[org.clojure/clojure "1.2.0"]
