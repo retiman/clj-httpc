@@ -66,7 +66,7 @@
   See <http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/HttpProtocolParams.html>"
   []
   (doto (BasicHttpParams.)
-    (HttpProtocolParams/setUserAgent "raven")
+    (HttpProtocolParams/setUserAgent "clj-httpc")
     (HttpProtocolParams/setVersion HttpVersion/HTTP_1_1)
     (HttpProtocolParams/setContentCharset HTTP/DEFAULT_CONTENT_CHARSET)
     (HttpConnectionParams/setSocketBufferSize 8192)
