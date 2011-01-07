@@ -43,9 +43,12 @@
    :server-name "localhost"
    :server-port 8080})
 
+(def http-client
+  (core/create-http-client))
+
 (defn request [req]
   (core/with-http-client
-    (core/create-http-client)
+    http-client
     #(core/request (merge base-req req))))
 
 (defn slurp-body [req]

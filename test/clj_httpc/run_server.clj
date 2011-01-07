@@ -12,7 +12,10 @@
     (addShutdownHook
       (Thread. (fn []
                  (println "shutting down connection manager")
-                 (core/shutdown)))))
+                 (core/with-http-client
+                   http-client
+                   #(core/shutdown))
+                 (println "shutdown complete")))))
   (println "booting test server")
     (run-jetty
       (-> #'handler (wrap-reload '(clj-httpc.core-test)))
