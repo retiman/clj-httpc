@@ -1,10 +1,15 @@
 (ns clj-httpc.util
   "Helper functions for the HTTP client."
-  (:import [java.net URLEncoder]
-           [org.apache.commons.codec.binary Base64]
-           [java.io ByteArrayInputStream ByteArrayOutputStream]
-           [java.util.zip InflaterInputStream DeflaterInputStream GZIPInputStream GZIPOutputStream]
-           [org.apache.commons.io IOUtils]))
+  (:import
+    [org.apache.commons.codec.binary Base64]
+    [java.net URLEncoder]
+    [java.io ByteArrayInputStream]
+    [java.io ByteArrayOutputStream]
+    [java.util.zip InflaterInputStream]
+    [java.util.zip DeflaterInputStream]
+    [java.util.zip GZIPInputStream]
+    [java.util.zip GZIPOutputStream]
+    [org.apache.commons.io IOUtils]))
 
 (defn utf8-bytes
   "Returns the UTF-8 bytes corresponding to the given string."

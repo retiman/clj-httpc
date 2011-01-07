@@ -1,11 +1,14 @@
 (ns clj-httpc.content-test
-  (:use [clojure.test])
-  (:require [clj-httpc.content :as content])
-  (:import [com.google.gdata.util ContentType]
-           [org.apache.http ProtocolVersion]
-           [org.apache.http.entity BasicHttpEntity]
-           [org.apache.http.impl DefaultHttpResponseFactory]
-           [org.apache.http.protocol BasicHttpContext]))
+  (:use
+    [clojure.test])
+  (:require
+    [clj-httpc.content :as content])
+  (:import
+    [com.google.gdata.util ContentType]
+    [org.apache.http ProtocolVersion]
+    [org.apache.http.entity BasicHttpEntity]
+    [org.apache.http.impl DefaultHttpResponseFactory]
+    [org.apache.http.protocol BasicHttpContext]))
 
 (defn- create-response
   [code entity]
@@ -72,4 +75,3 @@
           resp (create-response 200 entity)
           limit 100]
       (is (content/over-limit? resp limit)))))
-

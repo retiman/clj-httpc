@@ -1,8 +1,11 @@
 (ns clj-httpc.client-test
-  (:use clojure.test)
-  (:require [clj-httpc.client :as client]
-            [clj-httpc.util :as util])
-  (:import [java.util Arrays]))
+  (:use
+    [clojure.test])
+  (:require
+    [clj-httpc.client :as client]
+    [clj-httpc.util :as util])
+  (:import
+    [java.util Arrays]))
 
 (def base-req
   {:scheme "http"
@@ -59,26 +62,6 @@
         resp (r-client {:body "ok"})]
     (is (= 200 (:status resp)))
     (is (= "ok" (:body resp)))))
-
-
-(deftest throw-on-exceptional
-  (let [client (fn [req] {:status 500})
-        e-client (client/wrap-exceptions client)]
-    (is (thrown-with-msg? Exception #"500"
-      (e-client {})))))
-
-(deftest pass-on-non-exceptional
-  (let [client (fn [req] {:status 200})
-        e-client (client/wrap-exceptions client)
-        resp (e-client {})]
-    (is (= 200 (:status resp)))))
-
-(deftest pass-on-exceptional-when-surpressed
-  (let [client (fn [req] {:status 500})
-        e-client (client/wrap-exceptions client)
-        resp (e-client {:throw-exceptions false})]
-    (is (= 500 (:status resp)))))
-
 
 (deftest apply-on-compressed
   (let [client (fn [req] {:body (util/gzip (util/utf8-bytes "foofoofoo"))

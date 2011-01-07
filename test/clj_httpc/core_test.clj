@@ -1,16 +1,25 @@
 (ns clj-httpc.core-test
-  (:use clojure.test)
-  (:require [clojure.contrib.pprint :as pp]
-            [clojure.contrib.io :as io]
-            [clj-httpc.core :as core]
-            [clj-httpc.util :as util]))
+  (:use
+    [clojure.test])
+  (:require
+    [clj-httpc.content :as content]
+    [clj-httpc.core :as core]
+    [clj-httpc.util :as util]
+    [clojure.contrib.pprint :as pp]
+    [clojure.contrib.io :as io]))
 
 (defn handler [req]
   (pp/pprint req)
   (println) (println)
   (condp = [(:request-method req) (:uri req)]
+    [:get "/redirect1"]
+      {:status 301 :headers {"Location" "/redirect2"}}
+    [:get "/redirect2"]
+      {:status 301 :headers {"Location" "/get"}}
     [:get "/get"]
       {:status 200 :body "get"}
+    [:get "/echo"]
+      {:status 200 :body (get-in req [:headers "x-echo"])}
     [:head "/head"]
       {:status 200}
     [:get "/content-type"]
@@ -18,6 +27,10 @@
     [:get "/content"]
       {:status 200 :body "hello" :headers {"Content-Type" "text/plain"
                                            "Content-Length" "1000"}}
+    [:get "/content-large"]
+      {:status 200
+       :body (apply str (repeat 10000 0))
+       :headers {"Content-Type" "text/plain"}}
     [:get "/header"]
       {:status 200 :body (get-in req [:headers "x-my-header"])}
     [:post "/post"]
@@ -31,7 +44,9 @@
    :server-port 8080})
 
 (defn request [req]
-  (core/request (merge base-req req)))
+  (core/with-http-client
+    (core/create-http-client)
+    #(core/request (merge base-req req))))
 
 (defn slurp-body [req]
   (io/slurp* (:body req)))
@@ -78,46 +93,59 @@
 (deftest aborts-on-non-matching-content-type
   (let [resp (request {:request-method :get
                        :uri "/content"
-                       :headers {"Accept" "application/json"}
-                       :ignore-body? true})]
+                       :headers {"Accept" "application/json"}})]
     (is (= nil (:body resp)))))
 
 (deftest proceeds-on-matching-content-type
   (let [resp (request {:request-method :get
                        :uri "/content"
-                       :headers {"Accept" "text/*"}
-                       :ignore-body? true})]
+                       :headers {"Accept" "text/*"}})]
     (is (= "hello\n" (slurp-body resp)))))
 
 (deftest aborts-on-content-length-over-limit
-  (let [resp (request {:request-method :get
-                       :uri "/content"
-                       :max-content-length 1
-                       :ignore-body? true})]
-    (is (= nil (:body resp)))))
+  (do
+    (let [resp (request {:request-method :get
+                         :uri "/content"
+                         :http-params {content/limit 1}})]
+      (is (zero? (:status resp)))
+      (is (nil? (:body resp))))
+    (let [resp (request {:request-method :get
+                         :uri "/content-large"
+                         :http-params {content/limit 1000}})]
+      (is (zero? (:status resp)))
+      (is (nil? (:body resp))))))
+
 
 (deftest proceeds-on-content-length-within-limit
   (do
     (let [resp (request {:request-method :get
                          :uri "/content"
-                         :max-content-length 1000
-                         :ignore-body? true})]
+                         :http-params {content/limit 1000}})]
       (is (= "hello\n" (slurp-body resp))))
     (let [resp (request {:request-method :get
                          :uri "/content"
-                         :max-content-length 1001
-                         :ignore-body? true})]
+                         :http-params {content/limit 1001}})]
       (is (= "hello\n" (slurp-body resp))))))
 
-(deftest proceeds-without-ignoring-body
-  (do
-    (let [resp (request {:request-method :get
-                         :uri "/content"
-                         :headers {"Accept" "application/json"}
-                         :ignore-body? false})]
-      (is (= "hello\n" (slurp-body resp))))
-    (let [resp (request {:request-method :get
-                         :uri "/content"
-                         :max-content-length 1
-                         :ignore-body? false})]
-      (is (= "hello\n" (slurp-body resp))))))
+(deftest follows-redirects
+  (let [resp (request {:request-method :get
+                       :uri "/redirect1"})]
+    (is (= (count (:redirects resp)) 2))))
+
+(deftest echos-header-value
+  (let [resp (request {:request-method :get
+                       :uri "/echo"
+                       :headers {"x-echo" "hello"}})]
+    (is (= "hello\n" (slurp-body resp)))))
+
+(deftest allows-parallel-requests
+  (let [reqs (map str (range 25))
+        agents (doall (map agent reqs))
+        test-req (fn [n]
+                   (let [resp (request {:request-method :get
+                                        :uri "/echo"
+                                        :headers {"x-echo" n}})]
+                     (= (str n "\n") (slurp-body resp))))]
+    (doseq [a agents] (send-off a test-req))
+    (apply await-for 10000 agents)
+    (doseq [a agents] (is (deref a)))))

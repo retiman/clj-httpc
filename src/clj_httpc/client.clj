@@ -1,11 +1,12 @@
 (ns clj-httpc.client
   "Batteries-included HTTP client."
-  (:require [clojure.contrib.string :as str]
-            [clj-httpc.core :as core]
-            [clj-httpc.util :as util])
-  (:import [java.net URL]
-           [org.apache.http.client.params CookiePolicy ClientPNames])
-  (:refer-clojure :exclude (get)))
+  (:refer-clojure :exclude (get))
+  (:require
+    [clj-httpc.core :as core]
+    [clj-httpc.util :as util]
+    [clojure.contrib.string :as str])
+  (:import
+    [java.net URL]))
 
 (defn update [m k f & args]
   (assoc m k (apply f (m k) args)))
@@ -20,19 +21,6 @@
      :server-port (if-pos (.getPort url-parsed))
      :uri (.getPath url-parsed)
      :query-string (.getQuery url-parsed)}))
-
-
-(def unexceptional-status?
-  #{200 201 202 203 204 205 206 207 300 301 302 303 307})
-
-(defn wrap-exceptions [client]
-  (fn [req]
-    (let [{:keys [status] :as resp} (client req)]
-      (if (or (not (clojure.core/get req :throw-exceptions true))
-              (unexceptional-status? status))
-        resp
-        (throw (Exception. (str status)))))))
-
 
 (defn follow-redirect [client req resp]
   (let [url (get-in resp [:headers "location"])]
@@ -49,7 +37,6 @@
         :else
           resp))))
 
-
 (defn wrap-decompression [client]
   (fn [req]
     (if (get-in req [:headers "Accept-Encoding"])
@@ -63,7 +50,6 @@
             (update resp-c :body util/inflate)
           resp-c)))))
 
-
 (defn wrap-output-coercion [client]
   (fn [{:keys [as] :as req}]
     (let [{:keys [body] :as resp} (client req)]
@@ -73,14 +59,12 @@
         (nil? as)
           (assoc resp :body (String. #^"[B" body "UTF-8"))))))
 
-
 (defn wrap-input-coercion [client]
   (fn [{:keys [body] :as req}]
     (if (string? body)
       (client (-> req (assoc :body (util/utf8-bytes body)
                              :character-encoding "UTF-8")))
       (client req))))
-
 
 (defn content-type-value [type]
   (if (keyword? type)
@@ -94,7 +78,6 @@
                         (content-type-value content-type))))
       (client req))))
 
-
 (defn wrap-accept [client]
   (fn [{:keys [accept] :as req}]
     (if accept
@@ -102,7 +85,6 @@
                       (assoc-in [:headers "Accept"]
                         (content-type-value accept))))
       (client req))))
-
 
 (defn accept-encoding-value [accept-encoding]
   (str/join ", " (map name accept-encoding)))
@@ -114,7 +96,6 @@
                       (assoc-in [:headers "Accept-Encoding"]
                         (accept-encoding-value accept-encoding))))
       (client req))))
-
 
 (defn generate-query-string [params]
   (str/join "&"
@@ -130,7 +111,6 @@
                              (generate-query-string query-params))))
       (client req))))
 
-
 (defn basic-auth-value [user password]
   (str "Basic "
        (util/base64-encode (util/utf8-bytes (str user ":" password)))))
@@ -143,7 +123,6 @@
                         (basic-auth-value user password))))
       (client req))))
 
-
 (defn wrap-method [client]
   (fn [req]
     (if-let [m (:method req)]
@@ -151,20 +130,10 @@
                       (assoc :request-method m)))
       (client req))))
 
-
 (defn wrap-url [client]
   (fn [req]
     (if-let [url (:url req)]
       (client (-> req (dissoc :url) (merge (parse-url url))))
-      (client req))))
-
-(defn wrap-http-params [client]
-  (fn [req]
-    (if-let [http-params (:http-params req)]
-      (client (-> req (dissoc :http-params)
-                      (assoc :http-params (merge {ClientPNames/COOKIE_POLICY
-                                                  CookiePolicy/BROWSER_COMPATIBILITY}
-                                                 http-params))))
       (client req))))
 
 (def #^{:doc
@@ -190,7 +159,6 @@
   request
   (-> #'core/request
     wrap-redirects
-    wrap-exceptions
     wrap-decompression
     wrap-input-coercion
     wrap-output-coercion
@@ -200,7 +168,6 @@
     wrap-accept-encoding
     wrap-content-type
     wrap-method
-    wrap-http-params
     wrap-url))
 
 (defn get
