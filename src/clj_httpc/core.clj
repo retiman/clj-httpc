@@ -3,8 +3,7 @@
   (:refer-clojure :exclude (time))
   (:require
     [clj-httpc.content :as content]
-    [clojure.contrib.logging :as log]
-    [clj-time.core :as time])
+    [clojure.contrib.logging :as log])
   (:import
     [clj_httpc EntityUtils]
     [clj_httpc LoggingRedirectHandler]
