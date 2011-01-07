@@ -40,16 +40,17 @@
     [org.apache.http.protocol HTTP]))
 
 (defn create-http-response
-  "Create a basic http response map from a uri."
+  "Create a basic http response map from a uri.  A 0 (zero) status indicates
+  that some sort of error unrelated to the HTTP spec has occurred."
   [uri]
-  {:uri uri               ; The uri that was passed in
-   :url uri               ; For compatability reasons, the uri is repeated here
-   :time (time/now)       ; Time that the request was issued
-   :status 0              ; A 0 status indicates special error
-   :headers nil           ; Response headers
-   :body nil              ; Response body - can be nil on timeout
-   :redirects #{}         ; Redirects that we went through for this req
-   :exception nil})       ; Any other exceptional status
+  {:uri uri
+   :url uri
+   :time (System/currentTimeMillis)
+   :status 0
+   :headers nil
+   :body nil
+   :redirects #{}
+   :exception nil})
 
 (defn create-http-params
   "A better way to get your default params (without jar introspection).
