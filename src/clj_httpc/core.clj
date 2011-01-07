@@ -198,14 +198,14 @@
                     :redirects (into #{} (.getURIs redirect-handler))
                     :body body))
       (catch UnknownHostException e
-        (log/debug e)
+        (log/info e)
         (assoc resp :exception e :status 0))
       (catch SocketException e
-        (log/debug e)
+        (log/info e)
         (.abort http-req)
         (assoc resp :exception e :status 408))
       (catch InterruptedIOException e
-        (log/debug e)
+        (log/info e)
         (.abort http-req)
         (assoc resp :exception e :status 0))
       (catch Exception e
