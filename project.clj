@@ -20,5 +20,6 @@
      [com.google.gdata/core "1.0"]]
   :dev-dependencies
     [[lein-javac "1.2.1-SNAPSHOT"]
+     [swank-clojure "1.2.1"]
      [ring/ring-jetty-adapter "0.2.5"]
      [ring/ring-devel "0.2.5"]])
