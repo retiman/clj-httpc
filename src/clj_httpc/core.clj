@@ -209,6 +209,7 @@
         (.abort http-req)
         (assoc resp :exception e :status 0))
       (catch Exception e
+        (log/error (str http-url))
         (log/error e)
         (.abort http-req)
         (assoc resp :exception e :status 0)))))
