@@ -1,4 +1,4 @@
-(defproject clj-httpc "1.4.0"
+(defproject clj-httpc "1.4.1"
   :description "HTTP client"
   :java-source-path "src"
   :warn-on-reflection true
