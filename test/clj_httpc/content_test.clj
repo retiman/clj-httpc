@@ -1,3 +1,4 @@
+
 (ns clj-httpc.content-test
   (:use
     [clojure.test])
@@ -61,9 +62,18 @@
     (let [acceptable (map #(ContentType. %) ["text/*"])
           content-type (ContentType. "text/xml")]
       (is (content/matches? acceptable content-type)))
+   (let [acceptable (map #(ContentType. %) ["text/*;q=0.7"])
+          content-type (ContentType. "text/html")]
+      (is (content/matches? acceptable content-type)))
     (let [acceptable []
           content-type (ContentType. "application/json")]
       (is (not (content/matches? acceptable content-type))))))
+
+(comment
+
+  (matches-acceptable-content-types)
+
+  )
 
 (deftest reports-over-limit?
   (do
