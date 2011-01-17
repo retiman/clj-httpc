@@ -1,3 +1,4 @@
+
 (ns clj-httpc.content
   "Utilities for content type handling."
   (:require
@@ -8,13 +9,19 @@
 
 (def limit "clj-httpc.content-length-limit")
 
+(defn make-content-type [ct]
+  (let [text (case ct
+               "text" "text/plain"
+               ct)]
+    (ContentType. text)))
+
 (defn get-type
   "Return the ContentType of the HTTP response body."
   [#^HttpResponse resp]
   (let [content-type (.. resp (getEntity) (getContentType))]
     (if (nil? content-type)
       nil
-      (ContentType. (.getValue content-type)))))
+      (make-content-type (.getValue content-type)))))
 
 (defn parse-accept
   "Returns a list of ContentTypes parsed from the Accept header."
@@ -22,8 +29,8 @@
   (if (contains? headers "Accept")
     (let [accept-value (get headers "Accept")
           content-types (su/split accept-value #",")]
-      (map #(ContentType. (su/trim %)) content-types))
-    (list (ContentType. "*/*"))))
+      (map #(make-content-type (su/trim %)) content-types))
+    (list (make-content-type "*/*"))))
 
 (defn matches?
   "Returns true if the supplied ContentType matches one of the acceptable

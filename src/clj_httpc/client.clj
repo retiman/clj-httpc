@@ -1,3 +1,4 @@
+
 (ns clj-httpc.client
   "Batteries-included HTTP client."
   (:refer-clojure :exclude (get))
@@ -22,6 +23,7 @@
      :uri (.getPath url-parsed)
      :query-string (.getQuery url-parsed)}))
 
+
 (defn follow-redirect [client req resp]
   (let [url (get-in resp [:headers "location"])]
     (client (merge req (parse-url url)))))
@@ -30,12 +32,12 @@
   (fn [{:keys [request-method] :as req}]
     (let [{:keys [status] :as resp} (client req)]
       (cond
-        (and (#{301 302 307} status) (#{:get :head} request-method))
-          (follow-redirect client req resp)
-        (and (= 303 status) (= :head request-method))
-          (follow-redirect client (assoc req :request-method :get) resp)
-        :else
-          resp))))
+       (and (#{301 302 307} status) (#{:get :head} request-method))
+         (follow-redirect client req resp)
+       (and (= 303 status) (= :head request-method))
+         (follow-redirect client (assoc req :request-method :get) resp)
+       :else
+         resp))))
 
 (defn wrap-decompression [client]
   (fn [req]
