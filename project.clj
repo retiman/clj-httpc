@@ -1,4 +1,4 @@
-(defproject clj-httpc "1.4.1"
+(defproject com.atti.wdm/clj-httpc "1.4.3-SNAPSHOT"
   :description "HTTP client"
   :java-source-path "src"
   :warn-on-reflection true
@@ -10,6 +10,7 @@
      [org.apache.httpcomponents/httpclient "4.0.3" :exclusions
        [org.apache.httpcomponents/httpcore]]
      [org.apache.httpcomponents/httpcore "4.1"]
+     [commons-logging "1.0.4"]
      [log4j/log4j "1.2.15" :exclusions
        [javax.mail/mail
         javax.jms/jms
