@@ -138,6 +138,16 @@
              (not (content/matches-acceptable? headers http-resp))
              (content/over-limit? http-resp length)))))
 
+(defn- create-error-response
+  "Create an error response to return in case of an exception."
+  [http-req http-resp {:keys [exception log-fn status abort?]
+                       :or {log-fn #(log/info %) abort? false}}]
+  (let [error-status (if status status (http-resp :status))
+        error-resp (assoc http-resp :exception exception :status error-status)]
+    (log-fn error-resp)
+    (if abort? (.abort http-req))
+    error-resp))
+
 (defn shutdown
   "Add a shutdown hook to shutdown the connection manager before your
   application exits."
@@ -198,24 +208,15 @@
                     :redirects (into #{} (.getURIs redirect-handler))
                     :body body))
       (catch UnknownHostException e
-        (let [error-resp (assoc resp :exception e :status 0)]
-          (log/info error-resp)
-          error-resp))
+        (create-error-response http-req resp {:exception e}))
       (catch SocketException e
-        (let [error-resp (assoc resp :exception e :status 408)]
-          (log/info error-resp)
-          (.abort http-req)
-          error-resp))
+        (create-error-response http-req resp {:exception e :status 408 :abort? true}))
       (catch InterruptedIOException e
-        (let [error-resp (assoc resp :exception e :status 0)]
-          (log/info error-resp)
-          (.abort http-req)
-          error-resp))
+        (create-error-response http-req resp {:exception e :abort? true}))
       (catch Exception e
-        (let [error-resp (assoc resp :exception e :status 0)]
-          (log/info error-resp)
-          (.abort http-req)
-          error-resp)))))
+        (create-error-response http-req resp {:exception e
+                                              :abort? true
+                                              :log-fn #(log/error %)})))))
 
 (defn with-http-client
   "Evaluates a function with *http-client* bound to http-client."
