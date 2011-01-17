@@ -198,21 +198,24 @@
                     :redirects (into #{} (.getURIs redirect-handler))
                     :body body))
       (catch UnknownHostException e
-        (log/info e)
-        (assoc resp :exception e :status 0))
+        (let [error-resp (assoc resp :exception e :status 0)]
+          (log/info error-resp)
+          error-resp))
       (catch SocketException e
-        (log/info e)
-        (.abort http-req)
-        (assoc resp :exception e :status 408))
+        (let [error-resp (assoc resp :exception e :status 408)]
+          (log/info error-resp)
+          (.abort http-req)
+          error-resp))
       (catch InterruptedIOException e
-        (log/info e)
-        (.abort http-req)
-        (assoc resp :exception e :status 0))
+        (let [error-resp (assoc resp :exception e :status 0)]
+          (log/info error-resp)
+          (.abort http-req)
+          error-resp))
       (catch Exception e
-        (log/error (str http-url))
-        (log/error e)
-        (.abort http-req)
-        (assoc resp :exception e :status 0)))))
+        (let [error-resp (assoc resp :exception e :status 0)]
+          (log/info error-resp)
+          (.abort http-req)
+          error-resp)))))
 
 (defn with-http-client
   "Evaluates a function with *http-client* bound to http-client."
