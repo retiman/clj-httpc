@@ -11,6 +11,7 @@ import org.apache.http.ProtocolException;
 import org.apache.http.impl.client.DefaultRedirectHandler;
 import org.apache.http.impl.client.RedirectLocations;
 import org.apache.http.protocol.HttpContext;
+import java.util.regex.*;
 
 /**
  * A redirect handler that overrides the default, and logs all the URIs that have
@@ -48,6 +49,22 @@ public class LoggingRedirectHandler extends DefaultRedirectHandler {
     } catch (IllegalAccessException e) {
       log.warn(e);
     }
-    return uri;
+
+    // ew 
+    // so ugly, but needed as GoDaddy can redirect domains from http://a.com/ 
+    // to http://b.com// . This double slash breaks apache client
+    // TODO move into a url sanitize method
+    String uriStr = uri.toString();
+    Pattern r = Pattern.compile("//$");
+    Matcher m = r.matcher(uriStr);
+    String uriStr2 = m.replaceAll("/");
+
+    try {
+        return new URI(uriStr2);
+    } catch (java.net.URISyntaxException e) {
+        log.warn(e);
+        return uri;
+    }
+    
   }
 }
