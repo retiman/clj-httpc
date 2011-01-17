@@ -7,6 +7,7 @@
   (:import
     [clj_httpc EntityUtils]
     [clj_httpc LoggingRedirectHandler]
+    [clj_httpc TrustEveryoneSSLSocketFactory]
     [java.io InterruptedIOException]
     [java.net SocketException]
     [java.net UnknownHostException]
@@ -14,7 +15,7 @@
     [org.apache.http HttpResponse]
     [org.apache.http HttpVersion]
     [org.apache.http Header]
-    [org.apache.http.client HttpClient]
+    [org.apache.http.client HttpClient ClientProtocolException]
     [org.apache.http.client.methods HttpGet]
     [org.apache.http.client.methods HttpPut]
     [org.apache.http.client.methods HttpPost]
@@ -90,7 +91,7 @@
   "Support the http and https schemes."
   []
   (let [http (Scheme. "http" (PlainSocketFactory/getSocketFactory) 80)
-        https (Scheme. "https" (SSLSocketFactory/getSocketFactory) 443)]
+        https (Scheme. "https" (TrustEveryoneSSLSocketFactory/getSocketFactory) 443)]
     (doto (SchemeRegistry.)
       (.register http)
       (.register https))))
@@ -169,7 +170,7 @@
       ; Add content-type and character encoding
       (if (and content-type character-encoding)
         (.addHeader http-req "Content-Type"
-                    (str content-type "; charset=" character-encoding)))
+                    (str content-type "; charset=" character-encoding))) ;; this is causing problems
       (if (and content-type (not character-encoding))
         (.addHeader http-req "Content-Type" content-type))
       (.addHeader http-req "Connection" "close")
@@ -208,9 +209,21 @@
         (log/info e)
         (.abort http-req)
         (assoc resp :exception e :status 0))
-      (catch Exception e
+      (catch ClientProtocolException e
+        (log/error "CPE")
         (log/error (str http-url))
         (log/error e)
+        (log/error (apply str (interpose "  \n" (.getStackTrace e))))
+        (log/error "cause:")
+        (log/error (.getCause e))
+        (log/error (apply str (interpose "  \n" (.getStackTrace (.getCause e)))))
+        (.abort http-req)
+        (assoc resp :exception e :status 0))
+      (catch Exception e
+        (log/error "regular exception")
+        (log/error (str http-url))
+        (log/error e)
+        (log/error (apply str (interpose "  \n" (.getStackTrace e))))
         (.abort http-req)
         (assoc resp :exception e :status 0)))))
 
