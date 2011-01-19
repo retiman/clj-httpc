@@ -148,6 +148,14 @@
     (log-fn error-resp)
     error-resp))
 
+(defn- log-exception
+  "Logs the exception's stacktrace."
+  [e]
+  (let [to-string #(apply str (interpose "  \n" (.getStackTrace %)))
+        e-trace (to-string e)
+        c-trace (to-string (.getCause e))]
+    (log/error (str e-trace c-trace))))
+
 (defn shutdown
   "Add a shutdown hook to shutdown the connection manager before your
   application exits."
@@ -163,7 +171,8 @@
   Note that where Ring uses InputStreams for the request and response bodies,
   the clj-httpc uses ByteArrays for the bodies."
   [{:keys [request-method scheme server-name server-port uri query-string
-           headers content-type character-encoding http-params body]}]
+           headers content-type character-encoding http-params body
+           log-exceptions?]}]
   (let [http-url (create-http-url scheme
                                   server-name
                                   server-port
