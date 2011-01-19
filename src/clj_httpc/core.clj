@@ -141,12 +141,11 @@
 
 (defn- create-error-response
   "Create an error response to return in case of an exception."
-  [http-req http-resp {:keys [exception log-fn status abort?]
-                       :or {log-fn #(log/info %) abort? false}}]
+  [http-req http-resp {:keys [exception log-fn status]
+                       :or {log-fn #(log/info %)}}]
   (let [error-status (if status status (http-resp :status))
         error-resp (assoc http-resp :exception exception :status error-status)]
     (log-fn error-resp)
-    (if abort? (.abort http-req))
     error-resp))
 
 (defn shutdown
@@ -201,26 +200,19 @@
             abort? (abort-request? request-method headers http-resp http-params)
             body (if abort?
                    (.abort http-req)
-                   (if http-entity (EntityUtils/toByteArray http-entity limit)))]
+                   (if http-entity (EntityUtils/toByteArray http-entity limit)))
+            status (if abort? 0 (.getStatusCode (.getStatusLine http-resp)))]
         (assoc resp
-               :status (if abort?
-                         0
-                         (.getStatusCode (.getStatusLine http-resp)))
+               :status status
                :headers (parse-headers http-resp)
                :redirects (into #{} (.getURIs redirect-handler))
                :body body))
       (catch UnknownHostException e
-        (create-error-response http-req resp {:exception e})
-        (.abort http-req)
-        (assoc resp :exception e :status 0))
+        (create-error-response http-req resp {:exception e}))
       (catch SocketException e
-        (create-error-response http-req resp {:exception e :status 408 :abort? true}))
+        (create-error-response http-req resp {:exception e :status 408}))
       (catch InterruptedIOException e
-        (create-error-response http-req resp {:exception e :abort? true}))
-      (catch Exception e
-        (log/info e)
-        (.abort http-req)
-        (assoc resp :exception e :status 0))
+        (create-error-response http-req resp {:exception e}))
       (catch ClientProtocolException e
         (log/error "CPE")
         (log/error (str http-url))
