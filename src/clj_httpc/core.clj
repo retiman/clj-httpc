@@ -191,15 +191,18 @@
             aborted? (abort-request? request-method headers http-resp http-params)
             body (if aborted?
                    (.abort http-req)
-                   (if http-entity (EntityUtils/toByteArray http-entity limit)))]
-        (assoc resp :status (if aborted?
-                              0
-                              (.getStatusCode (.getStatusLine http-resp)))
-                    :headers (parse-headers http-resp)
-                    :redirects (into #{} (.getURIs redirect-handler))
-                    :body body))
+                   (if http-entity (EntityUtils/toByteArray http-entity limit)))
+            new-resp (assoc resp :status (if aborted?
+                                  0
+                                  (.getStatusCode (.getStatusLine http-resp)))
+                   :headers (parse-headers http-resp)
+                   :redirects (into #{} (.getURIs redirect-handler))
+                   :body body)]
+        (.abort http-req) ;; see: http://hc.apache.org/httpcomponents-client-ga/tutorial/html/fundamentals.html#d4e143
+        new-resp)
       (catch UnknownHostException e
         (log/info e)
+        (.abort http-req)
         (assoc resp :exception e :status 0))
       (catch SocketException e
         (log/info e)
