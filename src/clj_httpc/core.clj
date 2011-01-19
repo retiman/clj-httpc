@@ -201,15 +201,14 @@
             aborted? (abort-request? request-method headers http-resp http-params)
             body (if aborted?
                    (.abort http-req)
-                   (if http-entity (EntityUtils/toByteArray http-entity limit)))
-            new-resp (assoc resp :status (if aborted?
-                                  0
-                                  (.getStatusCode (.getStatusLine http-resp)))
-                   :headers (parse-headers http-resp)
-                   :redirects (into #{} (.getURIs redirect-handler))
-                   :body body)]
-        (.abort http-req) ;; see: http://hc.apache.org/httpcomponents-client-ga/tutorial/html/fundamentals.html#d4e143
-        new-resp)
+                   (if http-entity (EntityUtils/toByteArray http-entity limit)))]
+        (assoc resp
+               :status (if aborted?
+                         0
+                         (.getStatusCode (.getStatusLine http-resp)))
+               :headers (parse-headers http-resp)
+               :redirects (into #{} (.getURIs redirect-handler))
+               :body body))
       (catch UnknownHostException e
         (create-error-response http-req resp {:exception e})
         (.abort http-req)
@@ -238,7 +237,13 @@
         (log/error e)
         (log/error (apply str (interpose "  \n" (.getStackTrace e))))
         (.abort http-req)
-        (assoc resp :exception e :status 0)))))
+        (assoc resp :exception e :status 0))
+      (finally
+        ; It is harmless to abort a request that has completed, and in some cases will
+        ; be required to release resources.  However, abort could stand to be placed
+        ; right after those situations:
+        ; See http://hc.apache.org/httpcomponents-client-ga/tutorial/html/fundamentals.html#d4e143
+        (.abort http-req)))))
 
 (defn with-http-client
   "Evaluates a function with *http-client* bound to http-client."
