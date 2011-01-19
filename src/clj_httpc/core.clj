@@ -198,12 +198,12 @@
       (let [http-resp #^HttpResponse (.execute *http-client* http-req http-context)
             http-entity (.getEntity http-resp)
             limit (get http-params content/limit)
-            aborted? (abort-request? request-method headers http-resp http-params)
-            body (if aborted?
+            abort? (abort-request? request-method headers http-resp http-params)
+            body (if abort?
                    (.abort http-req)
                    (if http-entity (EntityUtils/toByteArray http-entity limit)))]
         (assoc resp
-               :status (if aborted?
+               :status (if abort?
                          0
                          (.getStatusCode (.getStatusLine http-resp)))
                :headers (parse-headers http-resp)
