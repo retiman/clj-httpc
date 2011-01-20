@@ -166,11 +166,11 @@
   "Create the HTTP request based on the method."
   [request-method #^String http-url]
   (case request-method
-     :get    (HttpGet. http-url)
-     :head   (HttpHead. http-url)
-     :put    (HttpPut. http-url)
-     :post   (HttpPost. http-url)
-     :delete (HttpDelete. http-url)))
+    :get    (HttpGet. http-url)
+    :head   (HttpHead. http-url)
+    :put    (HttpPut. http-url)
+    :post   (HttpPost. http-url)
+    :delete (HttpDelete. http-url)))
 
 (defn create-error-response
   "Create an error response to return in case of an exception."
