@@ -1,6 +1,8 @@
 (ns clj-httpc.core
   "Core HTTP request/response implementation."
   (:refer-clojure :exclude (time))
+  (:use
+    [clj-httpc.util])
   (:require
     [clj-httpc.content :as content]
     [clojure.contrib.logging :as log])
@@ -39,89 +41,6 @@
     [org.apache.http.protocol BasicHttpContext]
     [org.apache.http.protocol HTTP]))
 
-(defn create-http-response
-  "Create a basic http response map from a uri.  A 0 (zero) status indicates
-  that some sort of error unrelated to the HTTP spec has occurred."
-  [uri]
-  {:uri uri
-   :url uri
-   :time (System/currentTimeMillis)
-   :status 0
-   :headers nil
-   :body nil
-   :redirects #{}
-   :exception nil})
-
-(defn create-http-params
-  "A better way to get your default params (without jar introspection).
-
-  For an explanation of each parameter:
-  See <http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/client/params/ClientPNames.html>
-  See <http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/CoreConnectionPNames.html>
-  See <http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/CoreProtocolPNames.html>
-
-  For information on setting each parameter:
-  See <http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/client/params/HttpClientParams.html>
-  See <http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/HttpConnectionParams.html>
-  See <http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/HttpProtocolParams.html>"
-  []
-  (doto (BasicHttpParams.)
-    (HttpProtocolParams/setUserAgent "clj-httpc")
-    (HttpProtocolParams/setVersion HttpVersion/HTTP_1_1)
-    (HttpProtocolParams/setContentCharset HTTP/DEFAULT_CONTENT_CHARSET)
-    (HttpConnectionParams/setSocketBufferSize 8192)
-    (HttpClientParams/setCookiePolicy CookiePolicy/BROWSER_COMPATIBILITY)
-    ; Do not use Expect: 100-Continue handshake because we normally do not send
-    ; a request body.
-    (HttpProtocolParams/setUseExpectContinue false)
-    ; Disable Nagle's algorithm; it is useful only if we intend to transmit a
-    ; lot of small packets of data.
-    (HttpConnectionParams/setTcpNoDelay true)
-    ; According to the docs, this check can add up to 30 ms overhead per request
-    ; and should be disabled for performance critical applications.
-    (HttpConnectionParams/setStaleCheckingEnabled false)
-    ; Set a timeout for connecting and waiting for data.
-    (HttpConnectionParams/setConnectionTimeout 10000)
-    (HttpConnectionParams/setSoTimeout 10000)
-    ; Tweak this to be the number of fetchers; we want a sustained 600 fetches
-    ; per second, so here's hoping.
-    (ConnManagerParams/setMaxTotalConnections 600)))
-
-(defn create-scheme-registry
-  "Support the http and https schemes."
-  []
-  (let [http (Scheme. "http" (PlainSocketFactory/getSocketFactory) 80)
-        https (Scheme. "https" (TrustEveryoneSSLSocketFactory/getSocketFactory) 443)]
-    (doto (SchemeRegistry.)
-      (.register http)
-      (.register https))))
-
-(defn create-http-client
-  "Create an http-client."
-  ([http-params scheme-registry]
-    (let [manager (ThreadSafeClientConnManager. http-params scheme-registry)]
-      (DefaultHttpClient. manager http-params)))
-  ([]
-    (create-http-client (create-http-params) (create-scheme-registry))))
-
-(defn create-http-url
-  "Create the URI as a String."
-  [scheme server-name server-port query-string uri]
-  (str scheme "://" server-name
-       (if server-port (str ":" server-port))
-       uri
-       (if query-string (str "?" query-string))))
-
-(defn create-http-request
-  "Create the HTTP request based on the method."
-  [request-method #^String http-url]
-  (case request-method
-     :get    (HttpGet. http-url)
-     :head   (HttpHead. http-url)
-     :put    (HttpPut. http-url)
-     :post   (HttpPost. http-url)
-     :delete (HttpDelete. http-url)))
-
 (def #^HttpClient *http-client* (DefaultHttpClient.))
 
 (defn- parse-headers [#^HttpResponse http-resp]
@@ -138,24 +57,6 @@
          (or (nil? (.getEntity http-resp))
              (not (content/matches-acceptable? headers http-resp))
              (content/over-limit? http-resp length)))))
-
-(defn- log-exception
-  "Logs the exception's stacktrace."
-  [e]
-  (let [to-string #(apply str (interpose "  \n" (.getStackTrace %)))
-        e-trace (to-string e)
-        c-trace (to-string (.getCause e))]
-    (log/error (str e-trace c-trace))))
-
-(defn- create-error-response
-  "Create an error response to return in case of an exception."
-  [http-req http-resp {:keys [exception log-fn log-exception? status]
-                       :or {log-fn #(log/info %)}}]
-  (let [error-status (if status status (http-resp :status))
-        error-resp (assoc http-resp :exception exception :status error-status)]
-    (log-fn error-resp)
-    (if log-exception? (log-exception exception))
-    error-resp))
 
 (defn shutdown
   "Add a shutdown hook to shutdown the connection manager before your

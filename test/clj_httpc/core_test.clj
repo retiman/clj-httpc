@@ -50,7 +50,7 @@
    :server-port 8080})
 
 (def http-client
-  (core/create-http-client))
+  (util/create-http-client))
 
 (defn request [req]
   (core/with-http-client
