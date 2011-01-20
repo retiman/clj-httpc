@@ -139,15 +139,6 @@
              (not (content/matches-acceptable? headers http-resp))
              (content/over-limit? http-resp length)))))
 
-(defn- create-error-response
-  "Create an error response to return in case of an exception."
-  [http-req http-resp {:keys [exception log-fn status]
-                       :or {log-fn #(log/info %)}}]
-  (let [error-status (if status status (http-resp :status))
-        error-resp (assoc http-resp :exception exception :status error-status)]
-    (log-fn error-resp)
-    error-resp))
-
 (defn- log-exception
   "Logs the exception's stacktrace."
   [e]
@@ -155,6 +146,16 @@
         e-trace (to-string e)
         c-trace (to-string (.getCause e))]
     (log/error (str e-trace c-trace))))
+
+(defn- create-error-response
+  "Create an error response to return in case of an exception."
+  [http-req http-resp {:keys [exception log-fn log-exception? status]
+                       :or {log-fn #(log/info %)}}]
+  (let [error-status (if status status (http-resp :status))
+        error-resp (assoc http-resp :exception exception :status error-status)]
+    (log-fn error-resp)
+    (if log-exception? (log-exception exception))
+    error-resp))
 
 (defn shutdown
   "Add a shutdown hook to shutdown the connection manager before your
@@ -172,7 +173,7 @@
   the clj-httpc uses ByteArrays for the bodies."
   [{:keys [request-method scheme server-name server-port uri query-string
            headers content-type character-encoding http-params body
-           log-exceptions?]}]
+           log-exception?]}]
   (let [http-url (create-http-url scheme
                                   server-name
                                   server-port
@@ -223,22 +224,9 @@
       (catch InterruptedIOException e
         (create-error-response http-req resp {:exception e}))
       (catch ClientProtocolException e
-        (log/error "CPE")
-        (log/error (str http-url))
-        (log/error e)
-        (log/error (apply str (interpose "  \n" (.getStackTrace e))))
-        (log/error "cause:")
-        (log/error (.getCause e))
-        (log/error (apply str (interpose "  \n" (.getStackTrace (.getCause e)))))
-        (.abort http-req)
-        (assoc resp :exception e :status 0))
+        (create-error-response http-req resp {:exception e :log-exception? log-exception?}))
       (catch Exception e
-        (log/error "regular exception")
-        (log/error (str http-url))
-        (log/error e)
-        (log/error (apply str (interpose "  \n" (.getStackTrace e))))
-        (.abort http-req)
-        (assoc resp :exception e :status 0))
+        (create-error-response http-req resp {:exception e :log-exception? log-exception?}))
       (finally
         ; It is harmless to abort a request that has completed, and in some cases will
         ; be required to release resources.  However, abort could stand to be placed
