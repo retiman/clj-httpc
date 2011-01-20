@@ -21,7 +21,12 @@
   :dev-dependencies
     [[lein-javac "1.2.1-SNAPSHOT"]
      [swank-clojure "1.2.1"]
+     [robert/hooke "1.1.0"]
      [ring/ring-jetty-adapter "0.2.5"]
      [ring/ring-devel "0.2.5"]]
+  :test-selectors
+    {:default (fn [t] (not (:integration t)))
+     :integration :integration
+     :all (fn [_] true)}
   :java-source-path "src"
   :warn-on-reflection true)
