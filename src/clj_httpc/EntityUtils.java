@@ -34,6 +34,10 @@ import java.io.Reader;
 import org.apache.http.HttpEntity;
 import org.apache.http.util.ByteArrayBuffer;
 
+/**
+ * This class is identical to the one in Commons HttpClient except for our
+ * addition in toByteArray.
+ */
 public final class EntityUtils {
   public static byte[] toByteArray(final HttpEntity entity,
                                    final Integer length) throws IOException {
@@ -61,6 +65,8 @@ public final class EntityUtils {
       int l;
       while((l = instream.read(tmp)) != -1) {
         buffer.append(tmp, 0, l);
+        // Added check to ensure that an exception is thrown if content
+        // length is over limit.
         if (buffer.length() > length) {
           String msg = "HTTP entity too large; limit is " + length;
           InterruptedIOException e = new InterruptedIOException(msg);
