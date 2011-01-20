@@ -124,8 +124,15 @@
       (catch InterruptedIOException e
         (create-error-response http-req resp e))
       (catch ClientProtocolException e
-        (assoc (create-error-response http-req resp e)
-               :redirects (into #{} (.getURIs redirect-handler))))
+        ; ClientProtocolException wraps other exceptions.  The String version of the
+        ; constructor is rarely used, so giving the user back the cause of the
+        ; exception is usually more useful.
+        (let [error-resp (create-error-response http-req resp e)]
+          (if (.getCause e)
+            (assoc error-resp
+                   :exception (.getCause e)
+                   :redirects (into #{} (.getURIs redirect-handler)))
+            error-resp)))
       (catch Exception e
         (create-error-response http-req resp e {:log-fn #(log/error %)}))
       (finally
