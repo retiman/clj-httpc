@@ -50,8 +50,8 @@ public class LoggingRedirectHandler extends DefaultRedirectHandler {
       log.warn(e);
     }
 
-    // ew 
-    // so ugly, but needed as GoDaddy can redirect domains from http://a.com/ 
+    // ew
+    // so ugly, but needed as GoDaddy can redirect domains from http://a.com/
     // to http://b.com// . This double slash breaks apache client
     // TODO move into a url sanitize method
     String uriStr = uri.toString();
@@ -65,6 +65,6 @@ public class LoggingRedirectHandler extends DefaultRedirectHandler {
         log.warn(e);
         return uri;
     }
-    
+
   }
 }
