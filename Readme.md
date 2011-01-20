@@ -22,10 +22,20 @@ The main HTTP client functionality is provided by the `clj-httpc.client` namespa
 
     (require '[clj-httpc.client :as client])
 
+If you want to create your own Commons HttpClient to use (e.g. to use a ThreadSafeClientConnManager) or if you want to abort response downloading based on content length:
+
+    (require '[clj-httpc.content :as content])
+    (use '[clj-httpc.core :only (with-http-client)])
+
 The client supports simple `get`, `head`, `put`, `post`, and `delete` requests. Responses are returned as Ring-style response maps:
 
-    (client/get "http://google.com")
+    (client/get "http://www.duck.com")
     => {:status 200
+        :start-time 1295562743800
+        :end-time 1295562743953
+        :time 153
+        :exception nil
+        :redirects #{#<URI http://www.google.com/>}
         :headers {"date" "Sun, 01 Aug 2010 07:03:49 GMT"
                   "cache-control" "private, max-age=0"
                   "content-type" "text/html; charset=ISO-8859-1"
@@ -36,6 +46,7 @@ More example requests:
 
     (client/get "http://site.com/resources/id")
 
+    ; Aborts if the response is not really JSON
     (client/get "http://site.com/resources/3" {:accept :json})
 
     (client/post "http://site.com/resources" {:body byte-array})
@@ -55,15 +66,24 @@ More example requests:
        :content-type :json
        :accept :json})
 
+    ; Aborts if the really-big-file is too large
+    (client/get "http://site.com/really-big-file.mpg" {:http-params {content/limit 100000}})
+
+    ; Use your own Commons HttpClient instance if you want to.  For example,
+    ; in case you wanted to share a single instance amongst multiple threads.
+    (with-http-client my-commons-http-client
+      (fn [_]
+        (client/get "http://www.duck.com")))
+
 A more general `response` function is also available, which is useful as a primitive for building higher-level interfaces:
 
     (defn api-action [method path & [opts]]
       (client/request
         (merge {:method method :url (str "http://site.com/" path)} opts)))
 
-The client will throw exceptions on, well, exceptional status codes:
+The client will not throw exceptions on exceptional status codes:
 
-    (client/get "http://site.com/broken")
+    (:exception (client/get "http://site.com/broken"))
     => Exception: 500
 
 The client will also follow redirects on the appropriate `30*` status codes.
