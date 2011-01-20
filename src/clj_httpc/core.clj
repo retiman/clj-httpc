@@ -73,8 +73,7 @@
   Note that where Ring uses InputStreams for the request and response bodies,
   the clj-httpc uses ByteArrays for the bodies."
   [{:keys [request-method scheme server-name server-port uri query-string
-           headers content-type character-encoding http-params body
-           log-exception?]}]
+           headers content-type character-encoding http-params body]}]
   (let [http-url (create-http-url scheme
                                   server-name
                                   server-port
@@ -125,13 +124,10 @@
       (catch InterruptedIOException e
         (create-error-response http-req resp {:exception e}))
       (catch ClientProtocolException e
-        (assoc
-          (create-error-response http-req resp {:exception e
-                                                :log-exception? log-exception?})
-          :redirects (into #{} (.getURIs redirect-handler))))
+        (assoc (create-error-response http-req resp {:exception e})
+               :redirects (into #{} (.getURIs redirect-handler))))
       (catch Exception e
-        (create-error-response http-req resp {:exception e
-                                              :log-exception? log-exception?}))
+        (create-error-response http-req resp {:exception e}))
       (finally
         ; It is harmless to abort a request that has completed, and in some cases will
         ; be required to release resources.  However, abort could stand to be placed

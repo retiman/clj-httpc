@@ -80,14 +80,6 @@
   [b]
   (IOUtils/toByteArray (DeflaterInputStream. (ByteArrayInputStream. b))))
 
-(defn stacktrace
-  "Returns the exception's and the cause's stacktrace as a String."
-  [e]
-  (let [to-string #(apply str (interpose "  \n" (.getStackTrace %)))
-        e-trace (to-string e)
-        c-trace (to-string (.getCause e))]
-    (str e-trace c-trace)))
-
 (defn create-http-response
   "Create a basic http response map from a uri.  A 0 (zero) status indicates
   that some sort of error unrelated to the HTTP spec has occurred."
@@ -173,11 +165,10 @@
 
 (defn create-error-response
   "Create an error response to return in case of an exception."
-  [http-req http-resp {:keys [exception status log-fn log-exception?]
+  [http-req http-resp {:keys [exception status log-fn]
                        :or {log-fn #(log/info %)}}]
   (let [resp (assoc http-resp
                     :exception exception
                     :status (if status status (http-resp :status)))]
     (log-fn resp)
-    (if log-exception? (log-fn (stacktrace exception)))
     resp))
