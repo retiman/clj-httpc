@@ -124,7 +124,6 @@
       (is (zero? (:status resp)))
       (is (nil? (:body resp))))))
 
-
 (deftest proceeds-on-content-length-within-limit
   (do
     (let [resp (request {:request-method :get
