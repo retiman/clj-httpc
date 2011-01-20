@@ -16,6 +16,12 @@
       {:status 301 :headers {"Location" "/redirect2"}}
     [:get "/redirect2"]
       {:status 301 :headers {"Location" "/get"}}
+    [:get "/circular-redirect1"]
+      {:status 302 :headers {"Location" "/circular-redirect2"}}
+    [:get "/circular-redirect2"]
+      {:status 302 :headers {"Location" "/circular-redirect1"}}
+    [:get "/bad-redirect"]
+      {:status 301 :headers {"Location" "/get//"}}
     [:get "/get"]
       {:status 200 :body "get"}
     [:get "/echo"]
@@ -134,6 +140,12 @@
   (let [resp (request {:request-method :get
                        :uri "/redirect1"})]
     (is (= (count (:redirects resp)) 2))))
+
+(deftest handles-circular-redirects
+  (let [resp (request {:request-method :get
+                       :uri "/circular-redirect1"})]
+    (is (= (count (:redirects resp)) 2))
+    (is (not (nil? (:exception resp))))))
 
 (deftest echos-header-value
   (let [resp (request {:request-method :get
