@@ -112,7 +112,7 @@
                    (.abort http-req)
                    (if http-entity (EntityUtils/toByteArray http-entity limit)))
             status (if abort? 0 (.getStatusCode (.getStatusLine http-resp)))]
-        (assoc resp
+        (assoc (timestamp resp)
                :status status
                :headers (parse-headers http-resp)
                :redirects (into #{} (.getURIs redirect-handler))

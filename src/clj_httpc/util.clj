@@ -80,13 +80,22 @@
   [b]
   (IOUtils/toByteArray (DeflaterInputStream. (ByteArrayInputStream. b))))
 
+(defn timestamp
+  "Adds timestamps to response hash."
+  [resp]
+  (let [start (resp :start-time)
+        end (System/currentTimeMillis)]
+    (assoc resp
+           :end-time end
+           :time (- end start))))
+
 (defn create-http-response
   "Create a basic http response map from a uri.  A 0 (zero) status indicates
   that some sort of error unrelated to the HTTP spec has occurred."
   [uri]
   {:uri uri
    :url uri
-   :time (System/currentTimeMillis)
+   :start-time (System/currentTimeMillis)
    :status 0
    :headers nil
    :body nil
@@ -167,7 +176,7 @@
   "Create an error response to return in case of an exception."
   [http-req http-resp exception & {:keys [log-fn status]
                                    :or {log-fn #(log/info %)}}]
-  (let [resp (assoc http-resp
+  (let [resp (assoc (timestamp http-resp)
                     :exception exception
                     :status (if status status (http-resp :status)))]
     (log-fn resp)
