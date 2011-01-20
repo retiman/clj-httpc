@@ -118,16 +118,16 @@
                :redirects (into #{} (.getURIs redirect-handler))
                :body body))
       (catch UnknownHostException e
-        (create-error-response http-req resp {:exception e}))
+        (create-error-response http-req resp e))
       (catch SocketException e
-        (create-error-response http-req resp {:exception e :status 408}))
+        (create-error-response http-req resp e {:status 408}))
       (catch InterruptedIOException e
-        (create-error-response http-req resp {:exception e}))
+        (create-error-response http-req resp e))
       (catch ClientProtocolException e
-        (assoc (create-error-response http-req resp {:exception e})
+        (assoc (create-error-response http-req resp e)
                :redirects (into #{} (.getURIs redirect-handler))))
       (catch Exception e
-        (create-error-response http-req resp {:exception e}))
+        (create-error-response http-req resp e {:log-fn #(log/error %)}))
       (finally
         ; It is harmless to abort a request that has completed, and in some cases will
         ; be required to release resources.  However, abort could stand to be placed
