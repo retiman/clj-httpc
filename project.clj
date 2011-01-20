@@ -1,7 +1,6 @@
 (defproject clj-httpc "1.5.0-SNAPSHOT"
-  :description "HTTP client"
-  :java-source-path "src"
-  :warn-on-reflection true
+  :description
+    "An idiomatic Clojure http client thinly wrapping the Apache client"
   :repositories
     {"clojars" "http://clojars.org/repo"}
   :dependencies
@@ -23,4 +22,6 @@
     [[lein-javac "1.2.1-SNAPSHOT"]
      [swank-clojure "1.2.1"]
      [ring/ring-jetty-adapter "0.2.5"]
-     [ring/ring-devel "0.2.5"]])
+     [ring/ring-devel "0.2.5"]]
+  :java-source-path "src"
+  :warn-on-reflection true)
