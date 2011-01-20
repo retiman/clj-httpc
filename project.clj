@@ -1,4 +1,4 @@
-(defproject com.atti.wdm/clj-httpc "1.4.3-SNAPSHOT"
+(defproject clj-httpc "1.4.3-SNAPSHOT"
   :description "HTTP client"
   :java-source-path "src"
   :warn-on-reflection true
