@@ -118,23 +118,23 @@
                :redirects (into #{} (.getURIs redirect-handler))
                :body body))
       (catch UnknownHostException e
-        (create-error-response http-req resp e))
+        (create-error-response resp e))
       (catch SocketException e
-        (create-error-response http-req resp e {:status 408}))
+        (create-error-response resp e {:status 408}))
       (catch InterruptedIOException e
-        (create-error-response http-req resp e))
+        (create-error-response resp e))
       (catch ClientProtocolException e
         ; ClientProtocolException wraps other exceptions.  The String version of the
         ; constructor is rarely used, so giving the user back the cause of the
         ; exception is usually more useful.
-        (let [error-resp (create-error-response http-req resp e)]
+        (let [error-resp (create-error-response resp e)]
           (if (.getCause e)
             (assoc error-resp
                    :exception (.getCause e)
                    :redirects (into #{} (.getURIs redirect-handler)))
             error-resp)))
       (catch Exception e
-        (create-error-response http-req resp e {:log-fn #(log/error %)}))
+        (create-error-response resp e {:log-fn #(log/error %)}))
       (finally
         ; It is harmless to abort a request that has completed, and in some cases will
         ; be required to release resources.  However, abort could stand to be placed

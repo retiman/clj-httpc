@@ -174,10 +174,9 @@
 
 (defn create-error-response
   "Create an error response to return in case of an exception."
-  [http-req http-resp exception & {:keys [log-fn status]
-                                   :or {log-fn #(log/info %)}}]
-  (let [resp (assoc (timestamp http-resp)
-                    :exception exception
-                    :status (if status status (http-resp :status)))]
-    (log-fn resp)
-    resp))
+  [resp exception & {:keys [log-fn status] :or {log-fn #(log/info %)}}]
+  (let [r (assoc (timestamp resp)
+                 :exception exception
+                 :status (if status status (resp :status)))]
+    (log-fn r)
+    r))
