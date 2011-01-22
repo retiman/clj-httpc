@@ -46,8 +46,6 @@ More example requests:
 
     (client/get "http://site.com/resources/id")
 
-    ; Aborts if the response is not really JSON
-    (client/get "http://site.com/resources/3" {:accept :json})
 
     (client/post "http://site.com/resources" {:body byte-array})
 
@@ -66,11 +64,16 @@ More example requests:
        :content-type :json
        :accept :json})
 
-    ; Aborts if the really-big-file is too large
+Aborts the request if the response body is not really JSON:
+
+    (client/get "http://site.com/resources/3" {:accept :json})
+
+Aborts the request if the really-big-file is too large:
+
     (client/get "http://site.com/really-big-file.mpg" {:http-params {content/limit 100000}})
 
-    ; Use your own Commons HttpClient instance if you want to.  For example,
-    ; in case you wanted to share a single instance amongst multiple threads.
+Use your own Commons HttpClient instance if you want to.  For example, in case you wanted to share a single instance amongst multiple threads:
+
     (with-http-client my-commons-http-client
       (fn [_]
         (client/get "http://www.duck.com")))
