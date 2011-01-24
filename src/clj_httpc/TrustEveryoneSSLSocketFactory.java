@@ -38,7 +38,7 @@ import java.security.UnrecoverableKeyException;
 public class TrustEveryoneSSLSocketFactory {
   public static SSLSocketFactory getSocketFactory() {
     try {
-      SSLContext context = SSLContext.getInstance("SSL");
+      SSLContext context = SSLContext.getInstance("TLS");
       context.init(
         null,
         new TrustManager[] {
@@ -54,7 +54,7 @@ public class TrustEveryoneSSLSocketFactory {
             }
           }
         },
-        new SecureRandom()
+        null
       );
 
       SSLSocketFactory factory = new SSLSocketFactory(context);
