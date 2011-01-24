@@ -3,6 +3,7 @@
   (:require
     [clojure.contrib.logging :as log])
   (:import
+    [clj_httpc TrustEveryoneSSLSocketFactory]
     [org.apache.commons.codec.binary Base64]
     [java.net URLEncoder]
     [java.io ByteArrayInputStream]
@@ -140,7 +141,8 @@
   "Support the http and https schemes."
   []
   (let [http (Scheme. "http" (PlainSocketFactory/getSocketFactory) 80)
-        https (Scheme. "https" (SSLSocketFactory/getSocketFactory) 443)]
+        https (Scheme. "https"
+                       (TrustEveryoneSSLSocketFactory/getSocketFactory) 443)]
     (doto (SchemeRegistry.)
       (.register http)
       (.register https))))
