@@ -9,7 +9,6 @@
   (:import
     [clj_httpc EntityUtils]
     [clj_httpc LoggingRedirectHandler]
-    [clj_httpc TrustEveryoneSSLSocketFactory]
     [java.io InterruptedIOException]
     [java.net SocketException]
     [java.net UnknownHostException]
