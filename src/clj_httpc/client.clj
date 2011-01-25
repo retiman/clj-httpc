@@ -1,4 +1,3 @@
-
 (ns clj-httpc.client
   "Batteries-included HTTP client."
   (:refer-clojure :exclude (get))
@@ -22,7 +21,6 @@
      :server-port (if-pos (.getPort url-parsed))
      :uri (.getPath url-parsed)
      :query-string (.getQuery url-parsed)}))
-
 
 (defn follow-redirect [client req resp]
   (let [url (get-in resp [:headers "location"])]
