@@ -6,6 +6,12 @@ import javax.net.ssl.TrustManager;
 import java.security.cert.X509Certificate;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 
+/**
+ * Use this SSLSocketFactory if you want to ignore SSL errors, and just fetch
+ * the URL regardless.
+ *
+ * See ssl_test.clj for an example of how to make use of this factory.
+ */
 public class TrustEveryoneSSLSocketFactory {
   public static SSLSocketFactory getSocketFactory() {
     try {
