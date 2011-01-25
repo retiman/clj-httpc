@@ -51,10 +51,9 @@ public class LoggingRedirectHandler extends DefaultRedirectHandler {
       log.warn(e);
     }
 
-    // ew
     // so ugly, but needed as GoDaddy can redirect domains from http://a.com/
     // to http://b.com// . This double slash breaks apache client
-    // TODO move into a url sanitize method
+    // TODO: Upgrade to http-client-4.1-beta1 to fix this problem.
     String uriStr = uri.toString();
     Pattern r = Pattern.compile("//$");
     Matcher m = r.matcher(uriStr);
