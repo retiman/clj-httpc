@@ -91,9 +91,8 @@
 
 (defn create-http-response
   "Create a basic http response map from a url."
-  [uri]
-  {:uri uri
-   :url uri
+  [url]
+  {:url url
    :start-time (System/currentTimeMillis)
    :status nil
    :headers nil
