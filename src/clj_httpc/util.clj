@@ -141,8 +141,7 @@
   "Support the http and https schemes."
   []
   (let [http (Scheme. "http" (PlainSocketFactory/getSocketFactory) 80)
-        ; TODO: Don't make this the *default* option!
-        https (Scheme. "https" (TrustEveryoneSSLSocketFactory/getSocketFactory) 443)]
+        https (Scheme. "https" (SSLSocketFactory/getSocketFactory) 443)]
     (doto (SchemeRegistry.)
       (.register http)
       (.register https))))

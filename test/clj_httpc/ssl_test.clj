@@ -1,14 +1,31 @@
 (ns clj-httpc.ssl-test
   (:use
-    [clojure.test])
+    [clojure.test]
+    [clj-httpc.util])
   (:require
     [clj-httpc.client :as client]
-    [clj-httpc.core :as core]
-    [clj-httpc.util :as util])
+    [clj-httpc.core :as core])
   (:import
-    [javax.net.ssl SSLException]))
+    [clj_httpc TrustEveryoneSSLSocketFactory]
+    [javax.net.ssl SSLException]
+    [org.apache.http.conn.scheme Scheme]
+    [org.apache.http.conn.scheme SchemeRegistry]
+    [org.apache.http.conn.scheme PlainSocketFactory]))
 
-(def http-client (util/create-http-client))
+(defn- create-relaxed-scheme-registry
+  []
+  (let [http-factory (PlainSocketFactory/getSocketFactory)
+        https-factory (TrustEveryoneSSLSocketFactory/getSocketFactory)
+        http (Scheme. "http" http-factory 80)
+        https (Scheme. "https" https-factory 443)]
+    (doto (SchemeRegistry.)
+      (.register http)
+      (.register https))))
+
+(def http-client
+  (create-http-client
+    (create-http-params)
+    (create-relaxed-scheme-registry)))
 
 (deftest
   ^{:integration true}
