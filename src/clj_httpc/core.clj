@@ -8,7 +8,7 @@
     [clojure.contrib.logging :as log])
   (:import
     [clj_httpc EntityUtils]
-    [clj_httpc LoggingRedirectHandler]
+    [clj_httpc LoggingRedirectStrategy]
     [java.io InterruptedIOException]
     [java.net SocketException]
     [java.net UnknownHostException]
@@ -31,9 +31,9 @@
                 (iterator-seq (.headerIterator http-resp)))))
 
 (defn- parse-redirects
-  "Gets the redirects from the LoggingRedirectHandler."
-  [redirect-handler]
-  (into #{} (.getURIs redirect-handler)))
+  "Gets the redirects from the LoggingRedirectStrategy."
+  [redirect-strategy]
+  (into #{} (.getURIs redirect-strategy)))
 
 (defn- abort-request?
   "Aborts the request if content types don't match or if the content length is
@@ -68,11 +68,11 @@
                                   uri)
         http-context #^HttpContext (BasicHttpContext.)
         http-req #^HttpUriRequest (create-http-request request-method http-url)
-        redirect-handler (LoggingRedirectHandler.)
+        redirect-strategy (LoggingRedirectStrategy.)
         resp (create-http-response http-url)]
     (try
-      ; Set the redirect handler
-      (.setRedirectHandler *http-client* redirect-handler)
+      ; Set the redirect strategy
+      (.setRedirectStrategy *http-client* redirect-strategy)
       ; Add content-type and character encoding
       ; Nate: this is causing problems
       ; TODO: What problems?
@@ -108,23 +108,23 @@
         (assoc (timestamp resp)
                :status status
                :headers (parse-headers http-resp)
-               :redirects (parse-redirects redirect-handler)
+               :redirects (parse-redirects redirect-strategy)
                :body body))
       (catch UnknownHostException e
-        (create-error-response resp (parse-redirects redirect-handler) e))
+        (create-error-response resp (parse-redirects redirect-strategy) e))
       (catch SocketException e
-        (create-error-response resp (parse-redirects redirect-handler) e
+        (create-error-response resp (parse-redirects redirect-strategy) e
                                :status 408))
       (catch InterruptedIOException e
-        (create-error-response resp (parse-redirects redirect-handler) e))
+        (create-error-response resp (parse-redirects redirect-strategy) e))
       (catch ClientProtocolException e
         ; ClientProtocolException wraps other exceptions.  The String version of
         ; the constructor is rarely used, so giving the user back the cause of
         ; the exception is usually more useful.
-        (assoc (create-error-response resp (parse-redirects redirect-handler) e)
+        (assoc (create-error-response resp (parse-redirects redirect-strategy) e)
                :exception (if (.getCause e) (.getCause e) e)))
       (catch Exception e
-        (create-error-response resp (parse-redirects redirect-handler) e))
+        (create-error-response resp (parse-redirects redirect-strategy) e))
       (finally
         ; It is harmless to abort a request that has completed, and in some
         ; cases will be required to release resources.  However, abort could
