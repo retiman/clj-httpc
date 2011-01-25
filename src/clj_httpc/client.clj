@@ -173,24 +173,34 @@
 (defn get
   "Like #'request, but sets the :method and :url as appropriate."
   [url & [req]]
-  (request (merge req {:method :get :url url})))
+  (try
+    (request (merge req {:method :get :url url}))
+    (catch Exception e (util/create-error-response url e))))
 
 (defn head
   "Like #'request, but sets the :method and :url as appropriate."
   [url & [req]]
-  (request (merge req {:method :head :url url})))
+  (try
+    (request (merge req {:method :head :url url}))
+    (catch Exception e (util/create-error-response url e))))
 
 (defn post
   "Like #'request, but sets the :method and :url as appropriate."
   [url & [req]]
-  (request (merge req {:method :post :url url})))
+  (try
+    (request (merge req {:method :post :url url}))
+    (catch Exception e (util/create-error-response url e))))
 
 (defn put
   "Like #'request, but sets the :method and :url as appropriate."
   [url & [req]]
-  (request (merge req {:method :put :url url})))
+  (try
+    (request (merge req {:method :put :url url}))
+    (catch Exception e (util/create-error-response url e))))
 
 (defn delete
   "Like #'request, but sets the :method and :url as appropriate."
   [url & [req]]
-  (request (merge req {:method :delete :url url})))
+  (try
+    (request (merge req {:method :delete :url url}))
+    (catch Exception e (util/create-error-response url e))))
