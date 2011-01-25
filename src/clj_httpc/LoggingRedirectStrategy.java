@@ -39,7 +39,9 @@ public class LoggingRedirectStrategy extends DefaultRedirectStrategy {
       final HttpContext context) throws ProtocolException {
     URI uri = super.getLocationURI(request, response, context);
     RedirectLocations redirectLocations = (RedirectLocations) context.getAttribute(REDIRECT_LOCATIONS);
-    this.uris = redirectLocations.getAll();
+    synchronized (this) {
+      this.uris = redirectLocations.getAll();
+    }
     return uri;
   }
 }
