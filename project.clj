@@ -6,9 +6,7 @@
   :dependencies
     [[org.clojure/clojure "1.2.0"]
      [org.clojure/clojure-contrib "1.2.0"]
-     [org.apache.httpcomponents/httpclient "4.0.3" :exclusions
-       [org.apache.httpcomponents/httpcore]]
-     [org.apache.httpcomponents/httpcore "4.1"]
+     [org.apache.httpcomponents/httpclient "4.1-beta1"]
      [commons-logging "1.0.4"]
      [log4j/log4j "1.2.15" :exclusions
        [javax.mail/mail
