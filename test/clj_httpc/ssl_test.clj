@@ -29,7 +29,7 @@
   test-ssl-verification
   (core/with-http-client http-client
     #(let [urls ["https://www.johnstoncounseling.com/"
-                "https://www.computerelectronicdepot.com/"]
+                 "https://www.computerelectronicdepot.com/"]
           rs (map client/get urls)]
       (doseq [r rs]
         (is (not (isa? (type (:exception r)) SSLException)))))))
