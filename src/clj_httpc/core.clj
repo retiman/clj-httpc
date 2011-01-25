@@ -115,7 +115,7 @@
             body (if abort?
                    (.abort http-req)
                    (if http-entity (EntityUtils/toByteArray http-entity limit)))
-            status (if abort? 0 (.getStatusCode (.getStatusLine http-resp)))]
+            status (if abort? nil (.getStatusCode (.getStatusLine http-resp)))]
         (assoc (timestamp resp)
                :status status
                :headers (parse-headers http-resp)

@@ -90,13 +90,12 @@
            :time (- end start))))
 
 (defn create-http-response
-  "Create a basic http response map from a uri.  A 0 (zero) status indicates
-  that some sort of error unrelated to the HTTP spec has occurred."
+  "Create a basic http response map from a url."
   [uri]
   {:uri uri
    :url uri
    :start-time (System/currentTimeMillis)
-   :status 0
+   :status nil
    :headers nil
    :body nil
    :redirects #{}

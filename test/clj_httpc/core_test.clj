@@ -116,12 +116,12 @@
     (let [resp (request {:request-method :get
                          :uri "/content"
                          :http-params {content/limit 1}})]
-      (is (zero? (:status resp)))
+      (is (nil? (:status resp)))
       (is (nil? (:body resp))))
     (let [resp (request {:request-method :get
                          :uri "/content-large"
                          :http-params {content/limit 1000}})]
-      (is (zero? (:status resp)))
+      (is (nil? (:status resp)))
       (is (nil? (:body resp))))))
 
 (deftest proceeds-on-content-length-within-limit
