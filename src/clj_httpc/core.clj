@@ -47,6 +47,11 @@
   (into {} (map (fn [#^Header h] [(.toLowerCase (.getName h)) (.getValue h)])
                 (iterator-seq (.headerIterator http-resp)))))
 
+(defn- parse-redirects
+  "Gets the redirects from the LoggingRedirectHandler."
+  [redirect-handler]
+  (into #{} (.getURIs redirect-handler)))
+
 (defn- abort-request?
   "Aborts the request if content types don't match or if the content length is
   too long."
@@ -114,26 +119,25 @@
         (assoc (timestamp resp)
                :status status
                :headers (parse-headers http-resp)
-               :redirects (into #{} (.getURIs redirect-handler))
+               :redirects (parse-redirects redirect-handler)
                :body body))
       (catch UnknownHostException e
-        (create-error-response resp e))
+        (create-error-response resp (parse-redirects redirect-handler) e))
       (catch SocketException e
-        (create-error-response resp e :status 408))
+        (create-error-response resp (parse-redirects redirect-handler) e :status 408))
       (catch InterruptedIOException e
-        (create-error-response resp e))
+        (create-error-response resp (parse-redirects redirect-handler) e))
       (catch ClientProtocolException e
         ; ClientProtocolException wraps other exceptions.  The String version of the
         ; constructor is rarely used, so giving the user back the cause of the
         ; exception is usually more useful.
-        (let [error-resp (create-error-response resp e)]
-          (if (.getCause e)
-            (assoc error-resp
-                   :exception (.getCause e)
-                   :redirects (into #{} (.getURIs redirect-handler)))
-            error-resp)))
+        (assoc (create-error-response resp (parse-redirects redirect-handler) e)
+               :exception (if (.getCause e) (.getCause e) e)))
       (catch Exception e
-        (create-error-response resp e :log-fn #(log/error %)))
+        (create-error-response resp
+                               (parse-redirects redirect-handler)
+                               e
+                               :log-fn #(log/error %)))
       (finally
         ; It is harmless to abort a request that has completed, and in some cases will
         ; be required to release resources.  However, abort could stand to be placed
