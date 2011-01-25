@@ -4,7 +4,6 @@
     [clojure.contrib.logging :as log])
   (:import
     [clj_httpc TrustEveryoneSSLSocketFactory]
-    [org.apache.commons.codec.binary Base64]
     [java.net URLEncoder]
     [java.io ByteArrayInputStream]
     [java.io ByteArrayOutputStream]
@@ -12,6 +11,7 @@
     [java.util.zip DeflaterInputStream]
     [java.util.zip GZIPInputStream]
     [java.util.zip GZIPOutputStream]
+    [org.apache.commons.codec.binary Base64]
     [org.apache.commons.io IOUtils]
     [org.apache.http.params BasicHttpParams]
     [org.apache.http HttpVersion]

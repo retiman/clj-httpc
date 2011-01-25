@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
@@ -11,7 +13,6 @@ import org.apache.http.ProtocolException;
 import org.apache.http.impl.client.DefaultRedirectHandler;
 import org.apache.http.impl.client.RedirectLocations;
 import org.apache.http.protocol.HttpContext;
-import java.util.regex.*;
 
 /**
  * A redirect handler that overrides the default, and logs all the URIs that have
