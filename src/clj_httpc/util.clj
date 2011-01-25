@@ -174,11 +174,8 @@
   "Create an error response to return in case of an exception."
   ([url e]
     (assoc (create-http-response url) :exception e))
-  ([resp redirects exception & {:keys [log-fn status]
-                                :or {log-fn #(log/info %)}}]
-    (let [r (assoc (timestamp resp)
-                   :exception exception
-                   :redirects redirects
-                   :status (if status status (resp :status)))]
-      (log-fn r)
-      r)))
+  ([resp redirects exception & {:keys [status]}]
+    (assoc (timestamp resp)
+           :exception exception
+           :redirects redirects
+           :status (if status status (resp :status)))))

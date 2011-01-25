@@ -124,8 +124,7 @@
         (assoc (create-error-response resp (parse-redirects redirect-handler) e)
                :exception (if (.getCause e) (.getCause e) e)))
       (catch Exception e
-        (create-error-response resp (parse-redirects redirect-handler) e
-                               :log-fn #(log/error %)))
+        (create-error-response resp (parse-redirects redirect-handler) e))
       (finally
         ; It is harmless to abort a request that has completed, and in some
         ; cases will be required to release resources.  However, abort could
