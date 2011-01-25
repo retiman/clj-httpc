@@ -14,11 +14,8 @@
   ^{:integration true}
   test-peer-not-authenticated
   (core/with-http-client http-client
-    #(let [urls ["https://keegoharbormi.expresspros.com/robots.txt"
-                "https://www.goodolddaysflorist.com/"]
-          rs (map client/get urls)]
-      (doseq [r rs]
-        (is (not (isa? (type (:exception r)) SSLException)))))))
+    #(let [resp (client/get "https://www.goodolddaysflorist.com/")]
+      (is (not (isa? (type (:exception resp)) SSLException))))))
 
 (deftest
   ^{:integration true}
@@ -31,8 +28,7 @@
   ^{:integration true}
   test-ssl-verification
   (core/with-http-client http-client
-    #(let [urls ["https://www.abrasiveprocessing.com/"
-                "https://www.johnstoncounseling.com/"
+    #(let [urls ["https://www.johnstoncounseling.com/"
                 "https://www.computerelectronicdepot.com/"]
           rs (map client/get urls)]
       (doseq [r rs]
