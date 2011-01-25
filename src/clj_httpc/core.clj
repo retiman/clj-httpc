@@ -74,9 +74,11 @@
       ; Set the redirect handler
       (.setRedirectHandler *http-client* redirect-handler)
       ; Add content-type and character encoding
+      ; Nate: this is causing problems
+      ; TODO: What problems?
       (if (and content-type character-encoding)
         (.addHeader http-req "Content-Type"
-                    (str content-type "; charset=" character-encoding))) ;; this is causing problems
+                    (str content-type "; charset=" character-encoding)))
       (if (and content-type (not character-encoding))
         (.addHeader http-req "Content-Type" content-type))
       (.addHeader http-req "Connection" "close")
@@ -85,13 +87,17 @@
         (.addHeader http-req (first header) (last header)))
       ; Add user specified parameters
       (doseq [param http-params]
-        (.. *http-client* (getParams) (setParameter (first param) (last param))))
+        (.. *http-client*
+          (getParams)
+          (setParameter (first param) (last param))))
       ; Check for a request body
       (if body
         (let [http-body (ByteArrayEntity. body)]
           (.setEntity #^HttpEntityEnclosingRequest http-req http-body)))
       ; Execute the request
-      (let [http-resp #^HttpResponse (.execute *http-client* http-req http-context)
+      (let [http-resp #^HttpResponse (.execute *http-client*
+                                               http-req
+                                               http-context)
             http-entity (.getEntity http-resp)
             limit (get http-params content/limit)
             abort? (abort-request? request-method headers http-resp http-params)
@@ -107,24 +113,23 @@
       (catch UnknownHostException e
         (create-error-response resp (parse-redirects redirect-handler) e))
       (catch SocketException e
-        (create-error-response resp (parse-redirects redirect-handler) e :status 408))
+        (create-error-response resp (parse-redirects redirect-handler) e
+                               :status 408))
       (catch InterruptedIOException e
         (create-error-response resp (parse-redirects redirect-handler) e))
       (catch ClientProtocolException e
-        ; ClientProtocolException wraps other exceptions.  The String version of the
-        ; constructor is rarely used, so giving the user back the cause of the
-        ; exception is usually more useful.
+        ; ClientProtocolException wraps other exceptions.  The String version of
+        ; the constructor is rarely used, so giving the user back the cause of
+        ; the exception is usually more useful.
         (assoc (create-error-response resp (parse-redirects redirect-handler) e)
                :exception (if (.getCause e) (.getCause e) e)))
       (catch Exception e
-        (create-error-response resp
-                               (parse-redirects redirect-handler)
-                               e
+        (create-error-response resp (parse-redirects redirect-handler) e
                                :log-fn #(log/error %)))
       (finally
-        ; It is harmless to abort a request that has completed, and in some cases will
-        ; be required to release resources.  However, abort could stand to be placed
-        ; right after those situations:
+        ; It is harmless to abort a request that has completed, and in some
+        ; cases will be required to release resources.  However, abort could
+        ; stand to be placed right after those situations:
         ; See http://hc.apache.org/httpcomponents-client-ga/tutorial/html/fundamentals.html#d4e143
         (.abort http-req)))))
 
