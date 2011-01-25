@@ -1,13 +1,8 @@
 package clj_httpc;
 
-import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolException;
@@ -20,7 +15,6 @@ import org.apache.http.protocol.HttpContext;
  * been encountered while handling redirects.
  */
 public class LoggingRedirectStrategy extends DefaultRedirectStrategy {
-  private final Log log = LogFactory.getLog(getClass());
   private List<URI> uris = new ArrayList<URI>();
 
   public List<URI> getURIs() {
