@@ -33,7 +33,9 @@
 (defn- parse-redirects
   "Gets the redirects from the LoggingRedirectStrategy."
   [redirect-strategy]
-  (into #{} (.getURIs redirect-strategy)))
+  (if (= (type redirect-strategy) LoggingRedirectStrategy)
+    (into #{} (.getURIs redirect-strategy))
+    nil))
 
 (defn- abort-request?
   "Aborts the request if content types don't match or if the content length is
@@ -68,11 +70,9 @@
                                   uri)
         http-context #^HttpContext (BasicHttpContext.)
         http-req #^HttpUriRequest (create-http-request request-method http-url)
-        redirect-strategy (LoggingRedirectStrategy.)
+        redirect-strategy (.getRedirectStrategy *http-client*)
         resp (create-http-response http-url)]
     (try
-      ; Set the redirect strategy
-      (.setRedirectStrategy *http-client* redirect-strategy)
       ; Add content-type and character encoding
       ; Nate: this is causing problems
       ; TODO: What problems?
