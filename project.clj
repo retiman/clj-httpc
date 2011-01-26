@@ -1,4 +1,4 @@
-(defproject clj-httpc "1.5.5"
+(defproject clj-httpc "1.5.6"
   :description
     "An idiomatic Clojure http client thinly wrapping the Apache client"
   :repositories
