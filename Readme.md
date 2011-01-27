@@ -46,7 +46,6 @@ More example requests:
 
     (client/get "http://site.com/resources/id")
 
-
     (client/post "http://site.com/resources" {:body byte-array})
 
     (client/post "http://site.com/resources" {:body "string"})
