@@ -6,7 +6,10 @@
     [org.apache.http HttpResponse]
     [com.google.gdata.util ContentType]))
 
-(def limit "clj-httpc.content-length-limit")
+(def #^{:doc
+  "Associate this key in the HttpParams with a number indicating the
+  number of bytes to download before aborting the request."}
+  limit "clj-httpc.content-length-limit")
 
 (defn make-content-type [ct]
   (let [text (case ct
