@@ -11,11 +11,16 @@
   number of bytes to download before aborting the request."}
   limit "clj-httpc.content-length-limit")
 
-(defn make-content-type [ct]
-  (let [text (case ct
-               "text" "text/plain"
-               ct)]
-    (ContentType. text)))
+(defn- create-content-type
+  "This is a big kludge and I'm not sure where else to put this, or if it
+  should be included at all.  Sometimes web servers will return invalid
+  Content-Type headers.  For example, instead of 'text/plain', they might
+  return 'text'.  The ContentType constructor will not allow these and
+  matches-acceptable? will fail.
+
+  TODO: Figure out a better place to put this or don't handle it at all."
+  [text]
+  (ContentType. (if (= text "text") "text/plain" text)))
 
 (defn get-type
   "Return the ContentType of the HTTP response body."
@@ -23,7 +28,7 @@
   (let [content-type (.. resp (getEntity) (getContentType))]
     (if (nil? content-type)
       nil
-      (make-content-type (.getValue content-type)))))
+      (create-content-type (.getValue content-type)))))
 
 (defn parse-accept
   "Returns a list of ContentTypes parsed from the Accept header."
@@ -31,8 +36,8 @@
   (if (contains? headers "Accept")
     (let [accept-value (get headers "Accept")
           content-types (su/split accept-value #",")]
-      (map #(make-content-type (su/trim %)) content-types))
-    (list (make-content-type "*/*"))))
+      (map #(create-content-type (su/trim %)) content-types))
+    (list (ContentType. "*/*"))))
 
 (defn matches?
   "Returns true if the supplied ContentType matches one of the acceptable
