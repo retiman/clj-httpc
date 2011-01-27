@@ -74,8 +74,6 @@
         resp (create-http-response http-url)]
     (try
       ; Add content-type and character encoding
-      ; Nate: this is causing problems
-      ; TODO: What problems?
       (if (and content-type character-encoding)
         (.addHeader http-req "Content-Type"
                     (str content-type "; charset=" character-encoding)))
