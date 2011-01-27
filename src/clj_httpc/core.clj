@@ -1,6 +1,5 @@
 (ns clj-httpc.core
   "Core HTTP request/response implementation."
-  (:refer-clojure :exclude (time))
   (:use
     [clj-httpc.util])
   (:require
