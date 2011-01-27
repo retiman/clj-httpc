@@ -1,4 +1,3 @@
-
 (ns clj-httpc.content
   "Utilities for content type handling."
   (:require
