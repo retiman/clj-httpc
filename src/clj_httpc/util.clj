@@ -15,6 +15,7 @@
     [java.util.zip GZIPOutputStream]
     [org.apache.commons.codec.binary Base64]
     [org.apache.commons.io IOUtils]
+    [org.apache.http HttpHost]
     [org.apache.http HttpVersion]
     [org.apache.http.client.methods HttpGet]
     [org.apache.http.client.methods HttpPut]
@@ -90,6 +91,11 @@
     (assoc resp
            :end-time end
            :time (- end start))))
+
+(defn rewrite
+  [s & {:keys [drop-fragment] :or {drop-fragment false}}]
+  (let [uri (URI. s)]
+    (URIUtils/rewriteURI uri (HttpHost. (.getHost uri)) drop-fragment)))
 
 (defn create-http-response
   "Create a basic http response map from a url."
