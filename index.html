@@ -1,0 +1,423 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Clojure documentation browser</title><style>
+.library
+{
+  padding: 0.5em 0 0 0 
+}
+.all-libs-toggle,.library-contents-toggle
+{
+ font-size: small;
+}
+.all-libs-toggle a,.library-contents-toggle a
+{
+ color: white
+}
+.library-member-doc-whitespace
+{
+ white-space: pre
+}
+.library-member-source-toggle
+{
+  font-size: small;
+  margin-top: 0.5em
+}
+.library-member-source
+{
+  display: none;
+  border-left: solid lightblue 
+}
+.library-member-docs
+{
+  font-family:monospace
+}
+.library-member-arglists
+{
+  font-family: monospace
+}
+.library-member-type
+{
+  font-weight: bold; 
+  font-size: small;
+  font-style: italic;
+  color: darkred
+}
+.lib-links
+{
+  margin: 0 0 1em 0
+}
+
+.lib-link-header
+{
+  color: white;
+  background: darkgreen;
+  width: 100%
+}
+
+.library-name 
+{ 
+  color: white;
+  background: darkblue;
+  width: 100%
+}
+
+.missing-library
+{
+  color: darkred; 
+  margin: 0 0 1em 0 
+}
+
+.library-members
+{
+  list-style: none
+}
+
+.library-member-name
+{
+  font-weight: bold;
+  font-size: 105%
+}</style><script language="JavaScript" type="text/javascript"> // <![CDATA[
+
+function getElem(id)
+{
+  if( document.getElementById )
+  {
+    return document.getElementById( id )
+  }
+  else if ( document.all )
+  {
+    return eval( 'document.all.' + id )
+  }
+  else
+    return false;
+}
+
+function setDisplayStyle(id,displayStyle)
+{
+  var elem = getElem (id)
+  if (elem)
+  {
+    elem.style.display = displayStyle
+  }
+
+}
+
+function setLinkToggleText (id, text)
+{
+ var elem = getElem (id)
+ if (elem)
+ {
+   elem.innerHTML = text
+ }
+}
+
+function collapse(id)
+{
+  setDisplayStyle (id, 'none')
+}
+
+function expand (id)
+{
+  setDisplayStyle (id, 'block')
+}
+
+function toggleSource( id )
+{
+  toggle(id, 'linkto-' + id, 'Hide Source', 'Show Source')
+}
+
+function toggle(targetid, linkid, textWhenOpen, textWhenClosed)
+{
+  var elem = getElem (targetid)
+  var link = getElem (linkid)
+
+  if (elem && link)
+  {
+    var isOpen = false
+    if (elem.style.display == '')
+    {
+      isOpen = link.innerHTML == textWhenOpen
+    }
+    else if( elem.style.display == 'block' )
+    {
+      isOpen = true
+    }
+    
+    if (isOpen)
+    {
+      elem.style.display = 'none'
+      link.innerHTML = textWhenClosed
+    }
+    else
+    {
+      elem.style.display = 'block'
+      link.innerHTML = textWhenOpen
+    }
+  }
+}
+
+      //]]>
+</script><script language="JavaScript" type="text/javascript">// <![CDATA[!
+function expandAllNamespaces()
+{
+expand(&apos;library-contents-clj-httpc.core&apos;);
+setLinkToggleText(&apos;library-contents-toggle-clj-httpc.core&apos;, &apos;-&apos;);
+expand(&apos;library-contents-clj-httpc.client&apos;);
+setLinkToggleText(&apos;library-contents-toggle-clj-httpc.client&apos;, &apos;-&apos;);
+
+}function collapseAllNamespaces()
+{
+collapse(&apos;library-contents-clj-httpc.core&apos;);
+setLinkToggleText(&apos;library-contents-toggle-clj-httpc.core&apos;, &apos;+&apos;);
+collapse(&apos;library-contents-clj-httpc.client&apos;);
+setLinkToggleText(&apos;library-contents-toggle-clj-httpc.client&apos;, &apos;+&apos;);
+
+}
+// ]]></script></head><body><div class="lib-links"><div class="lib-link-header">Namespaces<span class="all-libs-toggle"> [ <a href="javascript:expandAllNamespaces()">Expand All</a> ] [ <a href="javascript:collapseAllNamespaces()">Collapse All</a> ]</span></div><a class="lib-link" href="#library-clj-httpc.client">clj-httpc.client</a> <a class="lib-link" href="#library-clj-httpc.core">clj-httpc.core</a></div><div class="library"><a name="library-clj-httpc.client"/><div class="library-name"><span class="library-contents-toggle">[ <a id="library-contents-toggle-clj-httpc.client" href="javascript:toggle(&apos;library-contents-clj-httpc.client&apos;, &apos;library-contents-toggle-clj-httpc.client&apos;, &apos;-&apos;, &apos;+&apos;)">-</a> ] </span>clj-httpc.client</div><div class="library-contents" id="library-contents-clj-httpc.client"><div class="library-member-links"><a class="lib-member-link" href="#member-clj-httpc.client-accept-encoding-value">accept-encoding-value</a> <a class="lib-member-link" href="#member-clj-httpc.client-basic-auth-value">basic-auth-value</a> <a class="lib-member-link" href="#member-clj-httpc.client-content-type-value">content-type-value</a> <a class="lib-member-link" href="#member-clj-httpc.client-delete">delete</a> <a class="lib-member-link" href="#member-clj-httpc.client-follow-redirect">follow-redirect</a> <a class="lib-member-link" href="#member-clj-httpc.client-generate-query-string">generate-query-string</a> <a class="lib-member-link" href="#member-clj-httpc.client-get">get</a> <a class="lib-member-link" href="#member-clj-httpc.client-head">head</a> <a class="lib-member-link" href="#member-clj-httpc.client-if-pos">if-pos</a> <a class="lib-member-link" href="#member-clj-httpc.client-parse-url">parse-url</a> <a class="lib-member-link" href="#member-clj-httpc.client-post">post</a> <a class="lib-member-link" href="#member-clj-httpc.client-put">put</a> <a class="lib-member-link" href="#member-clj-httpc.client-request">request</a> <a class="lib-member-link" href="#member-clj-httpc.client-update">update</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-accept">wrap-accept</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-accept-encoding">wrap-accept-encoding</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-basic-auth">wrap-basic-auth</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-content-type">wrap-content-type</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-decompression">wrap-decompression</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-input-coercion">wrap-input-coercion</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-method">wrap-method</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-output-coercion">wrap-output-coercion</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-query-params">wrap-query-params</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-redirects">wrap-redirects</a> <a class="lib-member-link" href="#member-clj-httpc.client-wrap-url">wrap-url</a></div><ol class="library-members"><li class="library-member"><a name="member-clj-httpc.client-accept-encoding-value"/><dl class="library-member-table"><dt class="library-member-name">accept-encoding-value</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([accept-encoding])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-accept-encoding-value&apos;)" id="linkto-membersource-clj-httpc.client-accept-encoding-value">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-accept-encoding-value"><pre>(defn accept-encoding-value [accept-encoding]
+  (str/join &quot;, &quot; (map name accept-encoding)))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-basic-auth-value"/><dl class="library-member-table"><dt class="library-member-name">basic-auth-value</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([user password])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-basic-auth-value&apos;)" id="linkto-membersource-clj-httpc.client-basic-auth-value">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-basic-auth-value"><pre>(defn basic-auth-value [user password]
+  (str &quot;Basic &quot;
+       (util/base64-encode (util/utf8-bytes (str user &quot;:&quot; password)))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-content-type-value"/><dl class="library-member-table"><dt class="library-member-name">content-type-value</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([type])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-content-type-value&apos;)" id="linkto-membersource-clj-httpc.client-content-type-value">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-content-type-value"><pre>(defn content-type-value [type]
+  (if (keyword? type)
+    (str &quot;application/&quot; (name type))
+    type))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-delete"/><dl class="library-member-table"><dt class="library-member-name">delete</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([url &amp; [req]])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Like #&apos;request, but sets the :method and :url as appropriate.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-delete&apos;)" id="linkto-membersource-clj-httpc.client-delete">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-delete"><pre>(defn delete
+  &quot;Like #&apos;request, but sets the :method and :url as appropriate.&quot;
+  [url &amp; [req]]
+  (request (merge req {:method :delete :url url})))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-follow-redirect"/><dl class="library-member-table"><dt class="library-member-name">follow-redirect</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client req resp])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-follow-redirect&apos;)" id="linkto-membersource-clj-httpc.client-follow-redirect">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-follow-redirect"><pre>(defn follow-redirect [client req resp]
+  (let [url (get-in resp [:headers &quot;location&quot;])]
+    (client (merge req (parse-url url)))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-generate-query-string"/><dl class="library-member-table"><dt class="library-member-name">generate-query-string</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([params])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-generate-query-string&apos;)" id="linkto-membersource-clj-httpc.client-generate-query-string">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-generate-query-string"><pre>(defn generate-query-string [params]
+  (str/join &quot;&amp;&quot;
+    (map (fn [[k v]] (str (util/url-encode (name k)) &quot;=&quot;
+                          (util/url-encode (str v))))
+         params)))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-get"/><dl class="library-member-table"><dt class="library-member-name">get</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([url &amp; [req]])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Like #&apos;request, but sets the :method and :url as appropriate.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-get&apos;)" id="linkto-membersource-clj-httpc.client-get">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-get"><pre>(defn get
+  &quot;Like #&apos;request, but sets the :method and :url as appropriate.&quot;
+  [url &amp; [req]]
+  (request (merge req {:method :get :url url})))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-head"/><dl class="library-member-table"><dt class="library-member-name">head</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([url &amp; [req]])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Like #&apos;request, but sets the :method and :url as appropriate.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-head&apos;)" id="linkto-membersource-clj-httpc.client-head">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-head"><pre>(defn head
+  &quot;Like #&apos;request, but sets the :method and :url as appropriate.&quot;
+  [url &amp; [req]]
+  (request (merge req {:method :head :url url})))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-if-pos"/><dl class="library-member-table"><dt class="library-member-name">if-pos</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([v])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-if-pos&apos;)" id="linkto-membersource-clj-httpc.client-if-pos">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-if-pos"><pre>(defn if-pos [v]
+  (if (and v (pos? v)) v))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-parse-url"/><dl class="library-member-table"><dt class="library-member-name">parse-url</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([url])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-parse-url&apos;)" id="linkto-membersource-clj-httpc.client-parse-url">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-parse-url"><pre>(defn parse-url [url]
+  (let [url-parsed (URL. url)]
+    {:scheme (.getProtocol url-parsed)
+     :server-name (.getHost url-parsed)
+     :server-port (if-pos (.getPort url-parsed))
+     :uri (.getPath url-parsed)
+     :query-string (.getQuery url-parsed)}))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-post"/><dl class="library-member-table"><dt class="library-member-name">post</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([url &amp; [req]])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Like #&apos;request, but sets the :method and :url as appropriate.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-post&apos;)" id="linkto-membersource-clj-httpc.client-post">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-post"><pre>(defn post
+  &quot;Like #&apos;request, but sets the :method and :url as appropriate.&quot;
+  [url &amp; [req]]
+  (request (merge req {:method :post :url url})))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-put"/><dl class="library-member-table"><dt class="library-member-name">put</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([url &amp; [req]])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Like #&apos;request, but sets the :method and :url as appropriate.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-put&apos;)" id="linkto-membersource-clj-httpc.client-put">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-put"><pre>(defn put
+  &quot;Like #&apos;request, but sets the :method and :url as appropriate.&quot;
+  [url &amp; [req]]
+  (request (merge req {:method :put :url url})))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-request"/><dl class="library-member-table"><dt class="library-member-name">request</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists"></span></div><div class="library-member-docs"><div class="library-member-doc-line">Executes the HTTP request corresponding to the given map and returns the</div><div class="library-member-doc-line">   response map for corresponding to the resulting HTTP response.</div><div class="library-member-doc-line"><span class="library-member-doc-whitespace"> </span></div><div class="library-member-doc-line">   In addition to the standard Ring request keys, the following keys are also</div><div class="library-member-doc-line">   recognized:</div><div class="library-member-doc-line">   * :url</div><div class="library-member-doc-line">   * :method</div><div class="library-member-doc-line">   * :query-params</div><div class="library-member-doc-line">   * :basic-auth</div><div class="library-member-doc-line">   * :content-type</div><div class="library-member-doc-line">   * :accept</div><div class="library-member-doc-line">   * :accept-encoding</div><div class="library-member-doc-line">   * :as</div><div class="library-member-doc-line"><span class="library-member-doc-whitespace"> </span></div><div class="library-member-doc-line">  The following additional behaviors over also automatically enabled:</div><div class="library-member-doc-line">   * Exceptions are thrown for status codes other than 200-207, 300-303, or 307</div><div class="library-member-doc-line">   * Gzip and deflate responses are accepted and decompressed</div><div class="library-member-doc-line">   * Input and output bodies are coerced as required and indicated by the :as</div><div class="library-member-doc-line">     option.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-request&apos;)" id="linkto-membersource-clj-httpc.client-request">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-request"><pre>(def #^{:doc
+  &quot;Executes the HTTP request corresponding to the given map and returns the...&quot;}
+  request
+  (-&gt; #&apos;core/request
+    wrap-redirects
+    wrap-decompression
+    wrap-input-coercion
+    wrap-output-coercion
+    wrap-query-params
+    wrap-basic-auth
+    wrap-accept
+    wrap-accept-encoding
+    wrap-content-type
+    wrap-method
+    wrap-url))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-update"/><dl class="library-member-table"><dt class="library-member-name">update</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([m k f &amp; args])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-update&apos;)" id="linkto-membersource-clj-httpc.client-update">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-update"><pre>(defn update [m k f &amp; args]
+  (assoc m k (apply f (m k) args)))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-accept"/><dl class="library-member-table"><dt class="library-member-name">wrap-accept</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-accept&apos;)" id="linkto-membersource-clj-httpc.client-wrap-accept">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-accept"><pre>(defn wrap-accept [client]
+  (fn [{:keys [accept] :as req}]
+    (if accept
+      (client (-&gt; req (dissoc :accept)
+                      (assoc-in [:headers &quot;Accept&quot;]
+                        (content-type-value accept))))
+      (client req))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-accept-encoding"/><dl class="library-member-table"><dt class="library-member-name">wrap-accept-encoding</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-accept-encoding&apos;)" id="linkto-membersource-clj-httpc.client-wrap-accept-encoding">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-accept-encoding"><pre>(defn wrap-accept-encoding [client]
+  (fn [{:keys [accept-encoding] :as req}]
+    (if accept-encoding
+      (client (-&gt; req (dissoc :accept-encoding)
+                      (assoc-in [:headers &quot;Accept-Encoding&quot;]
+                        (accept-encoding-value accept-encoding))))
+      (client req))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-basic-auth"/><dl class="library-member-table"><dt class="library-member-name">wrap-basic-auth</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-basic-auth&apos;)" id="linkto-membersource-clj-httpc.client-wrap-basic-auth">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-basic-auth"><pre>(defn wrap-basic-auth [client]
+  (fn [req]
+    (if-let [[user password] (:basic-auth req)]
+      (client (-&gt; req (dissoc :basic-auth)
+                      (assoc-in [:headers &quot;Authorization&quot;]
+                        (basic-auth-value user password))))
+      (client req))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-content-type"/><dl class="library-member-table"><dt class="library-member-name">wrap-content-type</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-content-type&apos;)" id="linkto-membersource-clj-httpc.client-wrap-content-type">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-content-type"><pre>(defn wrap-content-type [client]
+  (fn [{:keys [content-type] :as req}]
+    (if content-type
+      (client (-&gt; req (assoc :content-type
+                        (content-type-value content-type))))
+      (client req))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-decompression"/><dl class="library-member-table"><dt class="library-member-name">wrap-decompression</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-decompression&apos;)" id="linkto-membersource-clj-httpc.client-wrap-decompression">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-decompression"><pre>(defn wrap-decompression [client]
+  (fn [req]
+    (if (get-in req [:headers &quot;Accept-Encoding&quot;])
+      (client req)
+      (let [req-c (update req :headers assoc &quot;Accept-Encoding&quot; &quot;gzip, deflate&quot;)
+            resp-c (client req)]
+        (case (get-in resp-c [:headers &quot;Content-Encoding&quot;])
+          &quot;gzip&quot;
+            (update resp-c :body util/gunzip)
+          &quot;deflate&quot;
+            (update resp-c :body util/inflate)
+          resp-c)))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-input-coercion"/><dl class="library-member-table"><dt class="library-member-name">wrap-input-coercion</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-input-coercion&apos;)" id="linkto-membersource-clj-httpc.client-wrap-input-coercion">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-input-coercion"><pre>(defn wrap-input-coercion [client]
+  (fn [{:keys [body] :as req}]
+    (if (string? body)
+      (client (-&gt; req (assoc :body (util/utf8-bytes body)
+                             :character-encoding &quot;UTF-8&quot;)))
+      (client req))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-method"/><dl class="library-member-table"><dt class="library-member-name">wrap-method</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-method&apos;)" id="linkto-membersource-clj-httpc.client-wrap-method">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-method"><pre>(defn wrap-method [client]
+  (fn [req]
+    (if-let [m (:method req)]
+      (client (-&gt; req (dissoc :method)
+                      (assoc :request-method m)))
+      (client req))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-output-coercion"/><dl class="library-member-table"><dt class="library-member-name">wrap-output-coercion</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-output-coercion&apos;)" id="linkto-membersource-clj-httpc.client-wrap-output-coercion">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-output-coercion"><pre>(defn wrap-output-coercion [client]
+  (fn [{:keys [as] :as req}]
+    (let [{:keys [body] :as resp} (client req)]
+      (cond
+        (or (nil? body) (= :byte-array as))
+          resp
+        (nil? as)
+          (assoc resp :body (String. #^&quot;[B&quot; body &quot;UTF-8&quot;))))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-query-params"/><dl class="library-member-table"><dt class="library-member-name">wrap-query-params</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-query-params&apos;)" id="linkto-membersource-clj-httpc.client-wrap-query-params">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-query-params"><pre>(defn wrap-query-params [client]
+  (fn [{:keys [query-params] :as req}]
+    (if query-params
+      (client (-&gt; req (dissoc :query-params)
+                      (assoc :query-string
+                             (generate-query-string query-params))))
+      (client req))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-redirects"/><dl class="library-member-table"><dt class="library-member-name">wrap-redirects</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-redirects&apos;)" id="linkto-membersource-clj-httpc.client-wrap-redirects">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-redirects"><pre>(defn wrap-redirects [client]
+  (fn [{:keys [request-method] :as req}]
+    (let [{:keys [status] :as resp} (client req)]
+      (cond
+        (and (#{301 302 307} status) (#{:get :head} request-method))
+          (follow-redirect client req resp)
+        (and (= 303 status) (= :head request-method))
+          (follow-redirect client (assoc req :request-method :get) resp)
+        :else
+          resp))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.client-wrap-url"/><dl class="library-member-table"><dt class="library-member-name">wrap-url</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([client])</span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.client-wrap-url&apos;)" id="linkto-membersource-clj-httpc.client-wrap-url">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.client-wrap-url"><pre>(defn wrap-url [client]
+  (fn [req]
+    (if-let [url (:url req)]
+      (client (-&gt; req (dissoc :url) (merge (parse-url url))))
+      (client req))))</pre></div></div></dd></dl></li></ol></div></div><div class="library"><a name="library-clj-httpc.core"/><div class="library-name"><span class="library-contents-toggle">[ <a id="library-contents-toggle-clj-httpc.core" href="javascript:toggle(&apos;library-contents-clj-httpc.core&apos;, &apos;library-contents-toggle-clj-httpc.core&apos;, &apos;-&apos;, &apos;+&apos;)">-</a> ] </span>clj-httpc.core</div><div class="library-contents" id="library-contents-clj-httpc.core"><div class="library-member-links"><a class="lib-member-link" href="#member-clj-httpc.core-*http-client*">*http-client*</a> <a class="lib-member-link" href="#member-clj-httpc.core-create-http-client">create-http-client</a> <a class="lib-member-link" href="#member-clj-httpc.core-create-http-params">create-http-params</a> <a class="lib-member-link" href="#member-clj-httpc.core-create-http-request">create-http-request</a> <a class="lib-member-link" href="#member-clj-httpc.core-create-http-response">create-http-response</a> <a class="lib-member-link" href="#member-clj-httpc.core-create-http-url">create-http-url</a> <a class="lib-member-link" href="#member-clj-httpc.core-create-scheme-registry">create-scheme-registry</a> <a class="lib-member-link" href="#member-clj-httpc.core-request">request</a> <a class="lib-member-link" href="#member-clj-httpc.core-shutdown">shutdown</a> <a class="lib-member-link" href="#member-clj-httpc.core-with-http-client">with-http-client</a></div><ol class="library-members"><li class="library-member"><a name="member-clj-httpc.core-*http-client*"/><dl class="library-member-table"><dt class="library-member-name">*http-client*</dt><dd><div class="library-member-info"><span class="library-member-type">var</span> <span class="library-member-arglists"></span></div><div class="library-member-docs"/><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-*http-client*&apos;)" id="linkto-membersource-clj-httpc.core-*http-client*">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-*http-client*"><pre>(def #^HttpClient *http-client* (DefaultHttpClient.))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.core-create-http-client"/><dl class="library-member-table"><dt class="library-member-name">create-http-client</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([http-params scheme-registry] [])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Create an http-client.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-create-http-client&apos;)" id="linkto-membersource-clj-httpc.core-create-http-client">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-create-http-client"><pre>(defn create-http-client
+  &quot;Create an http-client.&quot;
+  ([http-params scheme-registry]
+    (let [manager (ThreadSafeClientConnManager. http-params scheme-registry)]
+      (DefaultHttpClient. manager http-params)))
+  ([]
+    (create-http-client (create-http-params) (create-scheme-registry))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.core-create-http-params"/><dl class="library-member-table"><dt class="library-member-name">create-http-params</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([])</span></div><div class="library-member-docs"><div class="library-member-doc-line">A better way to get your default params (without jar introspection).</div><div class="library-member-doc-line"><span class="library-member-doc-whitespace"> </span></div><div class="library-member-doc-line">  For an explanation of each parameter:</div><div class="library-member-doc-line">  See &lt;http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/client/params/ClientPNames.html&gt;</div><div class="library-member-doc-line">  See &lt;http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/CoreConnectionPNames.html&gt;</div><div class="library-member-doc-line">  See &lt;http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/CoreProtocolPNames.html&gt;</div><div class="library-member-doc-line"><span class="library-member-doc-whitespace"> </span></div><div class="library-member-doc-line">  For information on setting each parameter:</div><div class="library-member-doc-line">  See &lt;http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/client/params/HttpClientParams.html&gt;</div><div class="library-member-doc-line">  See &lt;http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/HttpConnectionParams.html&gt;</div><div class="library-member-doc-line">  See &lt;http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/HttpProtocolParams.html&gt;</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-create-http-params&apos;)" id="linkto-membersource-clj-httpc.core-create-http-params">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-create-http-params"><pre>(defn create-http-params
+  &quot;A better way to get your default params (without jar introspection)....&quot;
+  []
+  (doto (BasicHttpParams.)
+    (HttpProtocolParams/setUserAgent &quot;raven&quot;)
+    (HttpProtocolParams/setVersion HttpVersion/HTTP_1_1)
+    (HttpProtocolParams/setContentCharset HTTP/DEFAULT_CONTENT_CHARSET)
+    (HttpConnectionParams/setSocketBufferSize 8192)
+    (HttpClientParams/setCookiePolicy CookiePolicy/BROWSER_COMPATIBILITY)
+    ; Do not use Expect: 100-Continue handshake because we normally do not send
+    ; a request body.
+    (HttpProtocolParams/setUseExpectContinue false)
+    ; Disable Nagle&apos;s algorithm; it is useful only if we intend to transmit a
+    ; lot of small packets of data.
+    (HttpConnectionParams/setTcpNoDelay true)
+    ; According to the docs, this check can add up to 30 ms overhead per request
+    ; and should be disabled for performance critical applications.
+    (HttpConnectionParams/setStaleCheckingEnabled false)
+    ; Set a timeout for connecting and waiting for data.
+    (HttpConnectionParams/setConnectionTimeout 10000)
+    (HttpConnectionParams/setSoTimeout 10000)
+    ; Tweak this to be the number of fetchers; we want a sustained 600 fetches
+    ; per second, so here&apos;s hoping.
+    (ConnManagerParams/setMaxTotalConnections 600)))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.core-create-http-request"/><dl class="library-member-table"><dt class="library-member-name">create-http-request</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([request-method http-url])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Create the HTTP request based on the method.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-create-http-request&apos;)" id="linkto-membersource-clj-httpc.core-create-http-request">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-create-http-request"><pre>(defn create-http-request
+  &quot;Create the HTTP request based on the method.&quot;
+  [request-method #^String http-url]
+  (case request-method
+     :get    (HttpGet. http-url)
+     :head   (HttpHead. http-url)
+     :put    (HttpPut. http-url)
+     :post   (HttpPost. http-url)
+     :delete (HttpDelete. http-url)))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.core-create-http-response"/><dl class="library-member-table"><dt class="library-member-name">create-http-response</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([uri])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Create a basic http response map from a uri.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-create-http-response&apos;)" id="linkto-membersource-clj-httpc.core-create-http-response">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-create-http-response"><pre>(defn create-http-response
+  &quot;Create a basic http response map from a uri.&quot;
+  [uri]
+  {:uri uri               ; The uri that was passed in
+   :url uri               ; For compatability reasons, the uri is repeated here
+   :time (time/now)       ; Time that the request was issued
+   :status 0              ; A 0 status indicates special error
+   :headers nil           ; Response headers
+   :body nil              ; Response body - can be nil on timeout
+   :redirects #{}         ; Redirects that we went through for this req
+   :exception nil})</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.core-create-http-url"/><dl class="library-member-table"><dt class="library-member-name">create-http-url</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([scheme server-name server-port query-string uri])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Create the URI as a String.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-create-http-url&apos;)" id="linkto-membersource-clj-httpc.core-create-http-url">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-create-http-url"><pre>(defn create-http-url
+  &quot;Create the URI as a String.&quot;
+  [scheme server-name server-port query-string uri]
+  (str scheme &quot;://&quot; server-name
+       (if server-port (str &quot;:&quot; server-port))
+       uri
+       (if query-string (str &quot;?&quot; query-string))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.core-create-scheme-registry"/><dl class="library-member-table"><dt class="library-member-name">create-scheme-registry</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Support the http and https schemes.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-create-scheme-registry&apos;)" id="linkto-membersource-clj-httpc.core-create-scheme-registry">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-create-scheme-registry"><pre>(defn create-scheme-registry
+  &quot;Support the http and https schemes.&quot;
+  []
+  (let [http (Scheme. &quot;http&quot; (PlainSocketFactory/getSocketFactory) 80)
+        https (Scheme. &quot;https&quot; (SSLSocketFactory/getSocketFactory) 443)]
+    (doto (SchemeRegistry.)
+      (.register http)
+      (.register https))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.core-request"/><dl class="library-member-table"><dt class="library-member-name">request</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([{:keys [request-method scheme server-name server-port uri query-string headers content-type character-encoding http-params body]}])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Executes the HTTP request corresponding to the given Ring request map and</div><div class="library-member-doc-line">  returns the Ring response map corresponding to the resulting HTTP response.</div><div class="library-member-doc-line"><span class="library-member-doc-whitespace"> </span></div><div class="library-member-doc-line">  Note that where Ring uses InputStreams for the request and response bodies,</div><div class="library-member-doc-line">  the clj-httpc uses ByteArrays for the bodies.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-request&apos;)" id="linkto-membersource-clj-httpc.core-request">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-request"><pre>(defn request
+  &quot;Executes the HTTP request corresponding to the given Ring request map and...&quot;
+  [{:keys [request-method scheme server-name server-port uri query-string
+           headers content-type character-encoding http-params body]}]
+  (let [http-url (create-http-url scheme
+                                  server-name
+                                  server-port
+                                  query-string
+                                  uri)
+        http-context #^HttpContext (BasicHttpContext.)
+        http-req #^HttpUriRequest (create-http-request request-method http-url)
+        redirect-handler (LoggingRedirectHandler.)
+        resp (create-http-response http-url)]
+    (try
+      ; Set the redirect handler
+      (.setRedirectHandler *http-client* redirect-handler)
+      ; Add content-type and character encoding
+      (if (and content-type character-encoding)
+        (.addHeader http-req &quot;Content-Type&quot;
+                    (str content-type &quot;; charset=&quot; character-encoding)))
+      (if (and content-type (not character-encoding))
+        (.addHeader http-req &quot;Content-Type&quot; content-type))
+      (.addHeader http-req &quot;Connection&quot; &quot;close&quot;)
+      ; Add user specified headers
+      (doseq [header headers]
+        (.addHeader http-req (first header) (last header)))
+      ; Add user specified parameters
+      (doseq [param http-params]
+        (.. *http-client* (getParams) (setParameter (first param) (last param))))
+      ; Check for a request body
+      (if body
+        (let [http-body (ByteArrayEntity. body)]
+          (.setEntity #^HttpEntityEnclosingRequest http-req http-body)))
+      ; Execute the request
+      (let [http-resp #^HttpResponse (.execute *http-client* http-req http-context)
+            http-entity (.getEntity http-resp)
+            limit (get http-params content/limit)
+            aborted? (abort-request? request-method headers http-resp http-params)
+            body (if aborted?
+                   (.abort http-req)
+                   (if http-entity (EntityUtils/toByteArray http-entity limit)))]
+        (assoc resp :status (if aborted?
+                              0
+                              (.getStatusCode (.getStatusLine http-resp)))
+                    :headers (parse-headers http-resp)
+                    :redirects (into #{} (.getURIs redirect-handler))
+                    :body body))
+      (catch UnknownHostException e
+        (log/info e)
+        (assoc resp :exception e :status 0))
+      (catch SocketException e
+        (log/info e)
+        (.abort http-req)
+        (assoc resp :exception e :status 408))
+      (catch InterruptedIOException e
+        (log/info e)
+        (.abort http-req)
+        (assoc resp :exception e :status 0))
+      (catch Exception e
+        (log/error e)
+        (.abort http-req)
+        (assoc resp :exception e :status 0)))))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.core-shutdown"/><dl class="library-member-table"><dt class="library-member-name">shutdown</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Add a shutdown hook to shutdown the connection manager before your</div><div class="library-member-doc-line">  application exits.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-shutdown&apos;)" id="linkto-membersource-clj-httpc.core-shutdown">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-shutdown"><pre>(defn shutdown
+  &quot;Add a shutdown hook to shutdown the connection manager before your...&quot;
+  []
+  (.. *http-client*
+    (getConnectionManager)
+    (shutdown)))</pre></div></div></dd></dl></li><li class="library-member"><a name="member-clj-httpc.core-with-http-client"/><dl class="library-member-table"><dt class="library-member-name">with-http-client</dt><dd><div class="library-member-info"><span class="library-member-type">fn</span> <span class="library-member-arglists">([http-client f])</span></div><div class="library-member-docs"><div class="library-member-doc-line">Evaluates a function with *http-client* bound to http-client.</div></div><div class="library-member-source-section"><div class="library-member-source-toggle">[ <a href="javascript:toggleSource(&apos;membersource-clj-httpc.core-with-http-client&apos;)" id="linkto-membersource-clj-httpc.core-with-http-client">Show Source</a> ]</div><div class="library-member-source" id="membersource-clj-httpc.core-with-http-client"><pre>(defn with-http-client
+  &quot;Evaluates a function with *http-client* bound to http-client.&quot;
+  [http-client f]
+  (binding [*http-client* http-client]
+    (f)))</pre></div></div></dd></dl></li></ol></div></div></body></html>
