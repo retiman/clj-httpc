@@ -1,0 +1,272 @@
+<html>
+  <head>
+    <title>clj-httpc.util API reference (clj-httpc)</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <!-- TODO: are we using these (from clojure.org)? If so, add the files -->
+    <script src="file/view/code_highlighter.js" type="text/javascript"></script>
+    <script src="file/view/clojure.js" type="text/javascript"></script>
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<a id="Logo" href="index.html"><img alt="Clojure" height="100" width="100" src="static/clojure-icon.gif" /></a>
+	<h1><a title="page header title" id="page-header" href="index.html">clj-httpc</a></h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <a class="wiki_link" href="index.html">Overview</a><br />
+    <a class="wiki_link" href="api-index.html">API Index</a><br />
+    <a class="wiki_link" href="#">Namespaces:</a>
+    <ul id="left-sidebar-list">
+      <li><a href="clj-httpc.client-api.html" class="wiki_link">clj-httpc.client</a></li><li><a href="clj-httpc.content-api.html" class="wiki_link">clj-httpc.content</a></li><li><a href="clj-httpc.core-api.html" class="wiki_link">clj-httpc.core</a></li><li><a href="clj-httpc.util-api.html" class="wiki_link">clj-httpc.util</a></li>
+    </ul>
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#toc0">Overview</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/base64-encode">base64-encode</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/create-error-response">create-error-response</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/create-http-client">create-http-client</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/create-http-params">create-http-params</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/create-http-request">create-http-request</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/create-http-response">create-http-response</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/create-http-url">create-http-url</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/create-scheme-registry">create-scheme-registry</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/deflate">deflate</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/gunzip">gunzip</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/gzip">gzip</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/inflate">inflate</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/timestamp">timestamp</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/url-encode">url-encode</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/utf8-bytes">utf8-bytes</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.util/utf8-string">utf8-string</a>
+    </div>
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag"><h1 id="overview">API for <span id="namespace-name">clj-httpc.util</span></h1>
+by <span id="author">Unknown</span><br />
+<br />Usage:
+<pre>
+(ns your-namespace
+  (:require <span id="long-name">clj-httpc.util</span>))
+</pre><pre>
+</pre><h2>Overview</h2>
+<pre id="namespace-docstr">Helper functions for the HTTP client.</pre>
+<br />
+<h2>Public Variables and Functions</h2>
+<div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/base64-encode">base64-encode</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (base64-encode unencoded)
+</pre>
+  <pre id="var-docstr">Encode an array of bytes into a base64 encoded string.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/create-error-response">create-error-response</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-error-response url e)
+       (create-error-response resp redirects exception &amp; {:keys [status]})
+</pre>
+  <pre id="var-docstr">Create an error response to return in case of an exception.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/create-http-client">create-http-client</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-http-client http-params scheme-registry)
+       (create-http-client)
+</pre>
+  <pre id="var-docstr">Create an http-client.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/create-http-params">create-http-params</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-http-params)
+</pre>
+  <pre id="var-docstr">A better way to get your default params (without jar introspection).
+
+For an explanation of each parameter:
+See &lt;http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/client/params/ClientPNames.html&gt;
+See &lt;http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/CoreConnectionPNames.html&gt;
+See &lt;http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/CoreProtocolPNames.html&gt;
+
+For information on setting each parameter:
+See &lt;http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/client/params/HttpClientParams.html&gt;
+See &lt;http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/HttpConnectionParams.html&gt;
+See &lt;<a href="http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/HttpProtocolParams.html">http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/HttpProtocolParams.html</a>&gt;</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/create-http-request">create-http-request</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-http-request request-method http-url)
+</pre>
+  <pre id="var-docstr">Create the HTTP request based on the method.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/create-http-response">create-http-response</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-http-response url)
+</pre>
+  <pre id="var-docstr">Create a basic http response map from a url.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/create-http-url">create-http-url</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-http-url scheme server-name server-port query-string uri)
+</pre>
+  <pre id="var-docstr">Create the URI as a String.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/create-scheme-registry">create-scheme-registry</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-scheme-registry)
+</pre>
+  <pre id="var-docstr">Support the http and https schemes.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/deflate">deflate</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (deflate b)
+</pre>
+  <pre id="var-docstr">Returns a deflate'd version of the given byte array.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/gunzip">gunzip</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (gunzip b)
+</pre>
+  <pre id="var-docstr">Returns a gunzip'd version of the given byte array.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/gzip">gzip</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (gzip b)
+</pre>
+  <pre id="var-docstr">Returns a gzip'd version of the given byte array.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/inflate">inflate</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (inflate b)
+</pre>
+  <pre id="var-docstr">Returns a zlib inflate'd version of the given byte array.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/timestamp">timestamp</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (timestamp resp)
+</pre>
+  <pre id="var-docstr">Adds timestamps to response hash.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/url-encode">url-encode</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (url-encode unencoded)
+</pre>
+  <pre id="var-docstr">Returns an UTF-8 URL encoded version of the given string.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/utf8-bytes">utf8-bytes</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (utf8-bytes s)
+</pre>
+  <pre id="var-docstr">Returns the UTF-8 bytes corresponding to the given string.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.util/utf8-string">utf8-string</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (utf8-string b)
+</pre>
+  <pre id="var-docstr">Returns the String corresponding to the UTF-8 decoding of the given bytes.</pre>
+  
+</div>
+
+
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">No copyright info </div>
+	</div>
+      </div>
+      <div id="DesignedBy">Logo &amp; site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      Clojure auto-documentation system by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>
