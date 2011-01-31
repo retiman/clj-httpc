@@ -65,7 +65,9 @@ More example requests:
 
 Aborts the request if the response body is not really JSON:
 
-    (client/get "http://site.com/resources/3" {:accept :json})
+    (client/get "http://site.com/resources/3"
+                {:http-params {content/force-match? true}
+                 :accept :json})
 
 Aborts the request if the really-big-file is too large:
 
