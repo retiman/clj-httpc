@@ -106,6 +106,8 @@
                :status status
                :headers (parse-headers http-resp)
                :redirects (parse-redirects redirect-strategy)
+               :exception (if abort?
+                            (InterruptedIOException. "Request aborted."))
                :body body))
       (catch UnknownHostException e
         (create-error-response resp (parse-redirects redirect-strategy) e))
