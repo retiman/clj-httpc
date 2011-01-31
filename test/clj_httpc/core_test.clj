@@ -100,39 +100,41 @@
     (is (= 500 (:status resp)))))
 
 (deftest aborts-on-non-matching-content-type
-  (let [resp (request {:request-method :get
+  (let [resp (request {:http-params {content/match-acceptable-content true}
+                       :request-method :get
                        :uri "/content"
                        :headers {"Accept" "application/json"}})]
     (is (= nil (:body resp)))))
 
 (deftest proceeds-on-matching-content-type
-  (let [resp (request {:request-method :get
+  (let [resp (request {:http-params {content/match-acceptable-content true}
+                       :request-method :get
                        :uri "/content"
                        :headers {"Accept" "text/*"}})]
     (is (= "hello\n" (slurp-body resp)))))
 
 (deftest aborts-on-content-length-over-limit
   (do
-    (let [resp (request {:request-method :get
-                         :uri "/content"
-                         :http-params {content/limit 1}})]
+    (let [resp (request {:http-params {content/limit 1}
+                         :request-method :get
+                         :uri "/content"})]
       (is (nil? (:status resp)))
       (is (nil? (:body resp))))
-    (let [resp (request {:request-method :get
-                         :uri "/content-large"
-                         :http-params {content/limit 1000}})]
+    (let [resp (request {:http-params {content/limit 1000}
+                         :request-method :get
+                         :uri "/content-large"})]
       (is (nil? (:status resp)))
       (is (nil? (:body resp))))))
 
 (deftest proceeds-on-content-length-within-limit
   (do
-    (let [resp (request {:request-method :get
-                         :uri "/content"
-                         :http-params {content/limit 1000}})]
+    (let [resp (request {:http-params {content/limit 1000}
+                         :request-method :get
+                         :uri "/content"})]
       (is (= "hello\n" (slurp-body resp))))
-    (let [resp (request {:request-method :get
-                         :uri "/content"
-                         :http-params {content/limit 1001}})]
+    (let [resp (request {:http-params {content/limit 1001}
+                         :request-method :get
+                         :uri "/content"})]
       (is (= "hello\n" (slurp-body resp))))))
 
 (deftest follows-redirects
