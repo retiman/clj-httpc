@@ -1,4 +1,3 @@
-
 (ns clj-httpc.content-test
   (:use
     [clojure.test])
