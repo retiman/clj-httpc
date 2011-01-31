@@ -22,7 +22,7 @@ The main HTTP client functionality is provided by the `clj-httpc.client` namespa
 
     (require '[clj-httpc.client :as client])
 
-If you want to create your own Commons HttpClient to use (e.g. to use a ThreadSafeClientConnManager) or if you want to abort response downloading based on content length:
+If you want to create your own Commons HttpClient to use (e.g. to use a `ThreadSafeClientConnManager`) or if you want to abort response downloading based on content length:
 
     (require '[clj-httpc.content :as content])
     (use '[clj-httpc.core :only (with-http-client)])
