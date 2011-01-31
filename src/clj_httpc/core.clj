@@ -43,7 +43,7 @@
   (let [length (get http-params content/limit)]
     (and (= request-method :get)
          (or (nil? (.getEntity http-resp))
-             (not (content/matches-acceptable? headers http-resp))
+             (not (content/matches-acceptable? headers http-resp http-params))
              (content/over-limit? http-resp length)))))
 
 (defn shutdown
