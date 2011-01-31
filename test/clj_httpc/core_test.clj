@@ -100,14 +100,14 @@
     (is (= 500 (:status resp)))))
 
 (deftest aborts-on-non-matching-content-type
-  (let [resp (request {:http-params {content/match-acceptable-content true}
+  (let [resp (request {:http-params {content/force-match? true}
                        :request-method :get
                        :uri "/content"
                        :headers {"Accept" "application/json"}})]
     (is (= nil (:body resp)))))
 
 (deftest proceeds-on-matching-content-type
-  (let [resp (request {:http-params {content/match-acceptable-content true}
+  (let [resp (request {:http-params {content/force-match? true}
                        :request-method :get
                        :uri "/content"
                        :headers {"Accept" "text/*"}})]

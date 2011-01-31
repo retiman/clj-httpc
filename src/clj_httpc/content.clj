@@ -16,7 +16,7 @@
   "Associate this key in the HttpParams with a boolean indicating whether or
   not to abort the request if the response content type does not match the
   list of acceptable content types provided in ther request."}
-  match-acceptable-content "clj-httpc.match-acceptable-content")
+  force-match? "clj-httpc.force-match")
 
 (defn- create-content-type
   "This is a big kludge and I'm not sure where else to put this, or if it
@@ -62,7 +62,7 @@
   "Returns true if the response's Content-Type matches any of the Accept
   headers."
   [headers resp params]
-  (if (get params match-acceptable-content)
+  (if (get params force-match?)
     (let [acceptable-types (parse-accept headers)
           content-type (get-type resp)]
       (matches? acceptable-types content-type))
