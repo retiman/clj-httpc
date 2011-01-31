@@ -61,7 +61,7 @@
     (let [acceptable-types (parse-accept headers)
           content-type (get-type resp)]
       (matches? acceptable-types content-type))
-    false))
+    true))
 
 (defn over-limit?
   "Returns true if response's Content-Length is too long."
