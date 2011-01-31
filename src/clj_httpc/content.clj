@@ -1,6 +1,7 @@
 (ns clj-httpc.content
   "Utilities for content type handling."
   (:require
+    [clojure.contrib.logging :as log]
     [clojure.contrib.str-utils2 :as su])
   (:import
     [org.apache.http HttpResponse]
@@ -26,7 +27,11 @@
 
   TODO: Figure out a better place to put this or don't handle it at all."
   [text]
-  (ContentType. (if (= text "text") "text/plain" text)))
+  (try
+    (ContentType. (if (= text "text") "text/plain" text))
+    (catch IllegalArgumentException e
+      (log/debug "Could not parse invalid media type: " text)
+      nil)))
 
 (defn get-type
   "Return the ContentType of the HTTP response body."
