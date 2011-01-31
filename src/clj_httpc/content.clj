@@ -52,10 +52,10 @@
 
 (defn matches?
   "Returns true if the supplied ContentType matches one of the acceptable
-  ContentTypes, or if the supplied ContentType is nil."
+  ContentTypes."
   [acceptable-types #^ContentType content-type]
   (if (nil? content-type)
-    true
+    false
     (some #(.match content-type %) acceptable-types)))
 
 (defn matches-acceptable?
