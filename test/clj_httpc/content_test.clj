@@ -68,12 +68,6 @@
           content-type (ContentType. "application/json")]
       (is (not (content/matches? acceptable content-type))))))
 
-(comment
-
-  (matches-acceptable-content-types)
-
-  )
-
 (deftest reports-over-limit?
   (do
     (let [entity (create-entity "text/html" nil 1000)
