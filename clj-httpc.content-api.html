@@ -48,6 +48,8 @@ namespace.
   <div style="margin-left: 1em;" class="toc-section">
     <a href="#toc0">Overview</a>
     <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.content/force-match?">force-match?</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#clj-httpc.content/get-type">get-type</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#clj-httpc.content/limit">limit</a>
@@ -78,6 +80,16 @@ by <span id="author">Unknown</span><br />
 <div id="var-entry">
   <br />
   <hr />
+  <h2 id="clj-httpc.content/force-match?">force-match?</h2>
+  <span id="var-type">var</span><br />
+  <pre id="var-usage"></pre>
+  <pre id="var-docstr">Associate this key in the HttpParams with a boolean indicating whether or
+not to abort the request if the response content type does not match the
+list of acceptable content types provided in ther request.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
   <h2 id="clj-httpc.content/get-type">get-type</h2>
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (get-type resp)
@@ -98,7 +110,7 @@ number of bytes to download before aborting the request.</pre>
   <hr />
   <h2 id="clj-httpc.content/matches-acceptable?">matches-acceptable?</h2>
   <span id="var-type">function</span><br />
-  <pre id="var-usage">Usage: (matches-acceptable? headers resp)
+  <pre id="var-usage">Usage: (matches-acceptable? headers resp params)
 </pre>
   <pre id="var-docstr">Returns true if the response's Content-Type matches any of the Accept
 headers.</pre>
@@ -111,7 +123,7 @@ headers.</pre>
   <pre id="var-usage">Usage: (matches? acceptable-types content-type)
 </pre>
   <pre id="var-docstr">Returns true if the supplied ContentType matches one of the acceptable
-ContentTypes, or if the supplied ContentType is nil.</pre>
+ContentTypes.</pre>
   
 </div><div id="var-entry">
   <br />
