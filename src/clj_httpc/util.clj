@@ -92,11 +92,6 @@
            :end-time end
            :time (- end start))))
 
-(defn rewrite
-  [s & {:keys [drop-fragment] :or {drop-fragment false}}]
-  (let [uri (URI. s)]
-    (URIUtils/rewriteURI uri (HttpHost. (.getHost uri)) drop-fragment)))
-
 (defn create-http-response
   "Create a basic http response map from a url."
   [url]
