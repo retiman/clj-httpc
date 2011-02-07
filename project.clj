@@ -1,8 +1,9 @@
-(defproject clj-httpc "1.5.7"
+(defproject clj-httpc "1.5.8"
   :description
     "An idiomatic Clojure http client thinly wrapping the Apache client"
   :repositories
-    {"clojars" "http://clojars.org/repo"}
+    {"clojars" "http://clojars.org/repo"
+     "mandubian-mvn" "http://mandubian-mvn.googlecode.com/svn/trunk/mandubian-mvn/repository"}
   :dependencies
     [[org.clojure/clojure "1.2.0"]
      [org.clojure/clojure-contrib "1.2.0"]
@@ -15,7 +16,7 @@
      [commons-codec "1.4"]
      [commons-io "1.4"]
      [commons-logging "1.0.4"]
-     [com.google.gdata/core "1.0"]]
+     [com.google.gdata/gdata-core-1.0 "1.36.0"]]
   :dev-dependencies
     [[lein-javac "1.2.1-SNAPSHOT"]
      [swank-clojure "1.2.1"]
