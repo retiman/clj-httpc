@@ -1,6 +1,9 @@
 (defproject clj-httpc "1.5.8"
   :description
     "An idiomatic Clojure http client thinly wrapping the Apache client"
+  :min-lein-version "1.4.2"
+  :java-source-path "src"
+  :warn-on-reflection true
   :repositories
     {"clojars" "http://clojars.org/repo"
      "mandubian-mvn" "http://mandubian-mvn.googlecode.com/svn/trunk/mandubian-mvn/repository"}
@@ -27,6 +30,4 @@
   :test-selectors
     {:default (fn [t] (not (:integration t)))
      :integration :integration
-     :all (fn [_] true)}
-  :java-source-path "src"
-  :warn-on-reflection true)
+     :all (fn [_] true)})
