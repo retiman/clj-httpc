@@ -64,6 +64,12 @@
         (or (nil? body) (= :byte-array as))
           resp
         (nil? as)
+          ; TODO: If the charset is not supported, currently it defaults to
+          ; the system's default encoding without any warning.  Some mechanism
+          ; to alert the user of this fact might be good.
+          ; TODO: This type of output coercion only considers the server's
+          ; Content-Type header, but possibly it could also consider the
+          ; Content-Type tag.  I do not relish doing this :(
           (let [header-value (mget (:headers resp) "content-type")
                 content-type (content/create-content-type header-value)
                 charset (content/get-charset content-type)]

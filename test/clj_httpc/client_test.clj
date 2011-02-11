@@ -5,6 +5,7 @@
     [clj-httpc.client :as client]
     [clj-httpc.util :as util])
   (:import
+    [java.nio.charset Charset]
     [java.util Arrays]))
 
 (def base-req
@@ -102,7 +103,17 @@
   (let [client (fn [req] {:body (util/utf8-bytes "foo")})
         o-client (client/wrap-output-coercion client)
         resp (o-client {:uri "/foo"})]
-    (is (= "foo" (:body resp)))))
+    (is (= "foo" (:body resp))))
+  (let [bs (byte-array (to-array (map #(.byteValue %) '(0xa4 0xa4 0xa4 0xe5))))
+        headers {"content-type" "text/plain; charset=big5"}
+        client (fn [_]
+                 (let [resp (client/request
+                              (merge base-req {:uri "/get" :method :get}))]
+                   (assoc resp :body bs
+                               :headers (merge (:headers resp) headers))))
+        o-client (client/wrap-output-coercion client)
+        resp (o-client {:uri "/foo"})]
+    (is (= "中文" (:body resp)))))
 
 (deftest pass-on-no-output-coercion
   (let [client (fn [req] {:body nil})
