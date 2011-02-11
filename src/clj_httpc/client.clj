@@ -1,12 +1,19 @@
 (ns clj-httpc.client
   "Batteries-included HTTP client."
   (:refer-clojure :exclude (get))
+  (:use
+    [clojure.contrib.def])
   (:require
     [clj-httpc.core :as core]
+    [clj-httpc.content :as content]
     [clj-httpc.util :as util]
     [clojure.contrib.string :as str])
   (:import
-    [java.net URL]))
+    [java.net URL]
+    [java.nio.charset Charset]
+    [com.google.gdata.util ContentType]))
+
+(defvar- mget clojure.core/get)
 
 (defn update [m k f & args]
   (assoc m k (apply f (m k) args)))
@@ -57,7 +64,10 @@
         (or (nil? body) (= :byte-array as))
           resp
         (nil? as)
-          (assoc resp :body (String. #^"[B" body "UTF-8"))))))
+          (let [header-value (mget (:headers resp) "content-type")
+                content-type (content/create-content-type header-value)
+                charset (content/get-charset content-type)]
+            (assoc resp :body (String. #^"[B" body charset)))))))
 
 (defn wrap-input-coercion [client]
   (fn [{:keys [body] :as req}]

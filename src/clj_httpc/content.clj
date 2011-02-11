@@ -4,6 +4,7 @@
     [clojure.contrib.logging :as log]
     [clojure.contrib.str-utils2 :as su])
   (:import
+    [java.nio.charset Charset UnsupportedCharsetException]
     [org.apache.http HttpResponse]
     [com.google.gdata.util ContentType]))
 
@@ -18,7 +19,7 @@
   list of acceptable content types provided in ther request."}
   force-match? "clj-httpc.force-match")
 
-(defn- create-content-type
+(defn create-content-type
   "This is a big kludge and I'm not sure where else to put this, or if it
   should be included at all.  Sometimes web servers will return invalid
   Content-Type headers.  For example, instead of 'text/plain', they might
@@ -40,6 +41,17 @@
     (if (nil? content-type)
       nil
       (create-content-type (.getValue content-type)))))
+
+(defn get-charset
+  "Return the Charset for this ContentType or the default Charset if it
+  doesn't exist."
+  [#^ContentType content-type]
+  (try
+    (if (nil? content-type)
+      (Charset/defaultCharset)
+      (Charset/forName (.getCharset content-type)))
+    (catch UnsupportedCharsetException e
+      (Charset/defaultCharset))))
 
 (defn parse-accept
   "Returns a list of ContentTypes parsed from the Accept header."
