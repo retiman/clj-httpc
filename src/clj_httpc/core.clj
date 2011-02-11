@@ -6,21 +6,15 @@
     [clj-httpc.content :as content]
     [clojure.contrib.logging :as log])
   (:import
-    [clj_httpc EntityUtils]
-    [clj_httpc LoggingRedirectStrategy]
+    [clj_httpc EntityUtils LoggingRedirectStrategy]
     [java.io InterruptedIOException]
-    [java.net SocketException]
-    [java.net UnknownHostException]
-    [org.apache.http HttpEntityEnclosingRequest]
-    [org.apache.http HttpResponse]
-    [org.apache.http Header]
-    [org.apache.http.client ClientProtocolException]
-    [org.apache.http.client HttpClient]
+    [java.net SocketException UnknownHostException]
+    [org.apache.http HttpEntityEnclosingRequest HttpResponse Header]
+    [org.apache.http.client ClientProtocolException HttpClient]
     [org.apache.http.client.methods HttpUriRequest]
     [org.apache.http.entity ByteArrayEntity]
     [org.apache.http.impl.client DefaultHttpClient]
-    [org.apache.http.protocol HttpContext]
-    [org.apache.http.protocol BasicHttpContext]))
+    [org.apache.http.protocol HttpContext BasicHttpContext]))
 
 (def #^HttpClient *http-client* (DefaultHttpClient.))
 
