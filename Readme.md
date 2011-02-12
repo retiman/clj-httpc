@@ -8,13 +8,14 @@ NOTE: ALL APIs ARE SUBJECT TO CHANGE WITHOUT NOTICE.
 
 ## Features
 
-These features are added on top of (or will be added on top of) `clj-http`:
+These features are added on top of `clj-http`:
 
 - Allows user to specify HttpParams to underlying HttpClient
 - Logs all redirects
 - Aborts downloading of response body if content types don't match
 - Aborts downloading of response body if content length is too long
 - Allows thread safe re-use a single instance of HttpClient
+- Correctly handles non-UTF-8 charsets in response Content-Type
 
 ## Usage
 
@@ -41,6 +42,12 @@ The client supports simple `get`, `head`, `put`, `post`, and `delete` requests. 
                   "content-type" "text/html; charset=ISO-8859-1"
                   ...}
         :body "<!doctype html>..."}
+
+    (client/get "http://www.site.com/zhongwen")
+    => {:status 200
+        ...
+        :headers {"content-type" "text/plain; charset=big5" ...}
+        :body "中文"}
 
 More example requests:
 

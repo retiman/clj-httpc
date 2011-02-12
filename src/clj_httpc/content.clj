@@ -21,7 +21,11 @@
 
 (def #^{:doc
   "Associate this key in the HttpParams with a String or Charset indicating
-  the charset to use for output coercion."}
+  the charset to use for output coercion.  This exists so the old client
+  behavior can be preserved, but you probably really don't want this; without
+  a Content-Type header in the HttpResponse, the charset will be the default
+  for that particular type (which is probably what you want)."
+  :deprecated "1.6.0"}
   default-charset "clj-httpc.content.default-charset")
 
 (defn create-content-type
