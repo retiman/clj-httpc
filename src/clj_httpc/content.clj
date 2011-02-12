@@ -19,6 +19,11 @@
   list of acceptable content types provided in ther request."}
   force-match? "clj-httpc.content.force-match?")
 
+(def #^{:doc
+  "Associate this key in the HttpParams with a String or Charset indicating
+  the charset to use for output coercion."}
+  default-charset "clj-httpc.content.default-charset")
+
 (defn create-content-type
   "This is a big kludge and I'm not sure where else to put this, or if it
   should be included at all.  Sometimes web servers will return invalid
