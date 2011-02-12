@@ -11,13 +11,13 @@
 (def #^{:doc
   "Associate this key in the HttpParams with a number indicating the
   number of bytes to download before aborting the request."}
-  limit "clj-httpc.content-length-limit")
+  limit "clj-httpc.content.limit")
 
 (def #^{:doc
   "Associate this key in the HttpParams with a boolean indicating whether or
   not to abort the request if the response content type does not match the
   list of acceptable content types provided in ther request."}
-  force-match? "clj-httpc.force-match")
+  force-match? "clj-httpc.force-match?")
 
 (defn create-content-type
   "This is a big kludge and I'm not sure where else to put this, or if it
