@@ -70,8 +70,6 @@
           ; TODO: This type of output coercion only considers the server's
           ; Content-Type header, but possibly it could also consider the
           ; Content-Type tag.  I do not relish doing this :(
-          ; TODO: Transcode the String.  Usually I just want UTF-8 instead of
-          ; whatever funky charset someone decided to use.
           (let [header-value (mget (:headers resp) "content-type")
                 content-type (content/create-content-type header-value)
                 charset (content/get-charset content-type)]
