@@ -113,7 +113,7 @@
                                :headers (merge (:headers resp) headers))))
         o-client (client/wrap-output-coercion client)
         resp (o-client {:uri "/foo"})]
-    (is (= "中文" (:body resp)))))
+    (is (= (str \u4e2d \u6587) (:body resp)))))
 
 (deftest pass-on-no-output-coercion
   (let [client (fn [req] {:body nil})
