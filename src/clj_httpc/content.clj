@@ -48,15 +48,17 @@
       (create-content-type (.getValue content-type)))))
 
 (defn get-charset
-  "Return the Charset for this ContentType or the default Charset if it
-  doesn't exist."
-  [#^ContentType content-type]
-  (try
-    (if (nil? content-type)
-      (Charset/defaultCharset)
-      (Charset/forName (.getCharset content-type)))
-    (catch UnsupportedCharsetException e
-      (Charset/defaultCharset))))
+  "Return the charset for this ContentType.  The default Content-Type for
+  HTTP application/octet-stream;charset=iso-8859-1 as per RFC2616, but for
+  backwards compatibility purposes."
+  [#^ContentType content-type default]
+  (cond
+    (and (nil? content-type) (not (nil? default)))
+      default
+    (nil? content-type)
+      "iso-8859-1"
+    :default
+      (.getCharset content-type)))
 
 (defn parse-accept
   "Returns a list of ContentTypes parsed from the Accept header."

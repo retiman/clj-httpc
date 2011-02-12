@@ -64,12 +64,11 @@
         (or (nil? body) (= :byte-array as))
           resp
         (nil? as)
-          ; TODO: If the charset is not supported, currently it defaults to
-          ; the system's default encoding without any warning.  Some mechanism
-          ; to alert the user of this fact might be good.
-          (let [header-value (mget (:headers resp) "content-type")
-                content-type (content/create-content-type header-value)
-                charset (content/get-charset content-type)]
+          (let [content-type (content/create-content-type
+                               (get-in resp '(:headers "content-type")))
+                charset (content/get-charset
+                          content-type
+                          (get-in req '(:http-params content/default-charset)))]
             (assoc resp :body (String. #^"[B" body charset)))))))
 
 (defn wrap-input-coercion [client]
