@@ -1,4 +1,4 @@
-(defproject clj-httpc "1.5.8"
+(defproject clj-httpc "1.6.0-1"
   :description
     "An idiomatic Clojure http client thinly wrapping the Apache client"
   :min-lein-version "1.4.2"
