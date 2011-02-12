@@ -110,11 +110,25 @@
         o-client (client/wrap-output-coercion client)
         resp (o-client {:uri "/foo"})]
     (is (= "foo" (:body resp))))
-  (let [bs (byte-array (to-array (map #(.byteValue %) '(0xa4 0xa4 0xa4 0xe5))))
+  (let [zhongwen (str \u4e2d \u6587)
+        bs (.getBytes zhongwen "big5")
         client (create-client {"content-type" "text/plain; charset=big5"} bs)
         o-client (client/wrap-output-coercion client)
-        resp (o-client {:uri "/foo"})]
-    (is (= (str \u4e2d \u6587) (:body resp)))))
+        resp (o-client {:uri "/"})]
+    (is (= zhongwen (:body resp))))
+  (let [zhongwen (str \u4e2d \u6587)
+        bs (.getBytes zhongwen "big5")
+        client (create-client {} bs)
+        o-client (client/wrap-output-coercion client)
+        resp (o-client {:uri "/"})]
+    (is (= (String. bs "iso-8859-1") (:body resp))))
+  (let [zhongwen (str \u4e2d \u6587)
+        bs (.getBytes zhongwen "utf-8")
+        client (create-client {} bs)
+        o-client (client/wrap-output-coercion client)
+        resp (o-client {:uri "/"
+                        :http-params {content/default-charset "utf-8"}})]
+    (is (= zhongwen (:body resp)))))
 
 (deftest pass-on-no-output-coercion
   (let [client (fn [req] {:body nil})

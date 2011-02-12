@@ -65,10 +65,10 @@
           resp
         (nil? as)
           (let [content-type (content/create-content-type
-                               (get-in resp '(:headers "content-type")))
+                               (get-in resp [:headers "content-type"]))
                 charset (content/get-charset
                           content-type
-                          (get-in req '(:http-params content/default-charset)))]
+                          (get-in req [:http-params content/default-charset]))]
             (assoc resp :body (String. #^"[B" body charset)))))))
 
 (defn wrap-input-coercion [client]

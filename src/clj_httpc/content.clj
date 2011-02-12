@@ -33,11 +33,13 @@
 
   TODO: Figure out a better place to put this or don't handle it at all."
   [text]
-  (try
-    (ContentType. (if (= text "text") "text/plain" text))
-    (catch IllegalArgumentException e
-      (log/debug "Could not parse invalid media type: " text)
-      nil)))
+  (if (nil? text)
+    nil
+    (try
+      (ContentType. (if (= text "text") "text/plain" text))
+      (catch IllegalArgumentException e
+        (log/debug "Could not parse invalid media type: " text)
+        nil))))
 
 (defn get-type
   "Return the ContentType of the HTTP response body."
