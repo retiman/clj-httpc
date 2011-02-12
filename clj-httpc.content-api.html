@@ -48,7 +48,13 @@ namespace.
   <div style="margin-left: 1em;" class="toc-section">
     <a href="#toc0">Overview</a>
     <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.content/create-content-type">create-content-type</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.content/default-charset">default-charset</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#clj-httpc.content/force-match?">force-match?</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#clj-httpc.content/get-charset">get-charset</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a href="#clj-httpc.content/get-type">get-type</a>
     </div><div style="margin-left: 1em;" class="toc-entry">
@@ -80,12 +86,50 @@ by <span id="author">Unknown</span><br />
 <div id="var-entry">
   <br />
   <hr />
+  <h2 id="clj-httpc.content/create-content-type">create-content-type</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-content-type text)
+</pre>
+  <pre id="var-docstr">This is a big kludge and I'm not sure where else to put this, or if it
+should be included at all.  Sometimes web servers will return invalid
+Content-Type headers.  For example, instead of 'text/plain', they might
+return 'text'.  The ContentType constructor will not allow these and
+matches-acceptable? will fail.
+
+TODO: Figure out a better place to put this or don't handle it at all.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.content/default-charset">default-charset</h2>
+  <span id="var-type">var</span><br />
+  <pre id="var-usage"></pre>
+  <pre id="var-docstr">Associate this key in the HttpParams with a String or Charset indicating
+the charset to use for output coercion.  This exists so the old client
+behavior can be preserved, but you probably really don't want this; without
+a Content-Type header in the HttpResponse, the charset will be the default
+for that particular type (which is probably what you want).</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
   <h2 id="clj-httpc.content/force-match?">force-match?</h2>
   <span id="var-type">var</span><br />
   <pre id="var-usage"></pre>
   <pre id="var-docstr">Associate this key in the HttpParams with a boolean indicating whether or
 not to abort the request if the response content type does not match the
 list of acceptable content types provided in ther request.</pre>
+  
+</div><div id="var-entry">
+  <br />
+  <hr />
+  <h2 id="clj-httpc.content/get-charset">get-charset</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (get-charset content-type default)
+</pre>
+  <pre id="var-docstr">Return the charset for this ContentType.  The default Content-Type for
+HTTP application/octet-stream;charset=iso-8859-1 as per RFC2616, but for
+backwards compatibility purposes.</pre>
   
 </div><div id="var-entry">
   <br />
