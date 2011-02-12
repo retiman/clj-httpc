@@ -17,7 +17,7 @@
   "Associate this key in the HttpParams with a boolean indicating whether or
   not to abort the request if the response content type does not match the
   list of acceptable content types provided in ther request."}
-  force-match? "clj-httpc.force-match?")
+  force-match? "clj-httpc.content.force-match?")
 
 (defn create-content-type
   "This is a big kludge and I'm not sure where else to put this, or if it
