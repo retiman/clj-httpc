@@ -3,6 +3,7 @@
     [clojure.test])
   (:require
     [clj-httpc.client :as client]
+    [clj-httpc.content :as content]
     [clj-httpc.util :as util])
   (:import
     [java.nio.charset Charset]
@@ -12,6 +13,11 @@
   {:scheme "http"
    :server-name "localhost"
    :server-port 8080})
+
+(defn create-client [headers body]
+  (fn [_]
+    (let [resp (client/request (merge base-req {:uri "/get" :method :get}))]
+      (assoc resp :body body :headers (merge (:headers resp) headers)))))
 
 (deftest rountrip
   (let [resp (client/request (merge base-req {:uri "/get" :method :get}))]
@@ -105,12 +111,7 @@
         resp (o-client {:uri "/foo"})]
     (is (= "foo" (:body resp))))
   (let [bs (byte-array (to-array (map #(.byteValue %) '(0xa4 0xa4 0xa4 0xe5))))
-        headers {"content-type" "text/plain; charset=big5"}
-        client (fn [_]
-                 (let [resp (client/request
-                              (merge base-req {:uri "/get" :method :get}))]
-                   (assoc resp :body bs
-                               :headers (merge (:headers resp) headers))))
+        client (create-client {"content-type" "text/plain; charset=big5"} bs)
         o-client (client/wrap-output-coercion client)
         resp (o-client {:uri "/foo"})]
     (is (= (str \u4e2d \u6587) (:body resp)))))
