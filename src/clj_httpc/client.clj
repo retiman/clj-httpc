@@ -13,8 +13,6 @@
     [java.nio.charset Charset]
     [com.google.gdata.util ContentType]))
 
-(defvar- mget clojure.core/get)
-
 (defn update [m k f & args]
   (assoc m k (apply f (m k) args)))
 
