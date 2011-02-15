@@ -82,7 +82,16 @@ Aborts the request if the really-big-file is too large:
 
 Use your own Commons HttpClient instance if you want to.  For example, in case you wanted to share a single instance amongst multiple threads:
 
-    (with-http-client my-commons-http-client
+    ; The following code is in util/create-http-client, but you can modify it to
+    ; suit your needs.
+    (def http-client
+      (let [http-params (util/create-http-params)
+            scheme-registry (util/create-scheme-registry)
+            manager (ThreadSafeClientConnManager. http-params scheme-registry)
+            client (DefaultHttpClient. manager http-params)]
+        (.setRedirectStrategy client (LoggingRedirectStrategy.))))
+
+    (with-http-client http-client
       (fn [_]
         (client/get "http://www.duck.com")))
 
