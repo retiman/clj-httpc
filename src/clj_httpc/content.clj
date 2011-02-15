@@ -29,21 +29,17 @@
   default-charset "clj-httpc.content.default-charset")
 
 (defn create-content-type
-  "This is a big kludge and I'm not sure where else to put this, or if it
-  should be included at all.  Sometimes web servers will return invalid
-  Content-Type headers.  For example, instead of 'text/plain', they might
-  return 'text'.  The ContentType constructor will not allow these and
-  matches-acceptable? will fail.
-
-  TODO: Figure out a better place to put this or don't handle it at all."
+  "Create a ContentType object from the Content-Type header; we'll allow
+  some kludge to default to sensible types."
   [text]
-  (if (nil? text)
-    nil
-    (try
-      (ContentType. (if (= text "text") "text/plain" text))
-      (catch IllegalArgumentException e
-        (log/debug "Could not parse invalid media type: " text)
-        nil))))
+  (try
+    (cond
+      (nil? text) nil
+      (= text "text") (ContentType. "text/plain")
+      :default (ContentType. text))
+    (catch IllegalArgumentException e
+      (log/debug "Could not parse invalid media type: " text)
+      nil)))
 
 (defn get-type
   "Return the ContentType of the HTTP response body."
