@@ -70,13 +70,13 @@ More example requests:
        :content-type :json
        :accept :json})
 
-Aborts the request if the response body is not really JSON:
+Aborts the request if the response body is not really JSON (aborted requests have status nil and body nil):
 
     (client/get "http://site.com/resources/3"
                 {:http-params {content/force-match? true}
                  :accept :json})
 
-Aborts the request if the really-big-file is too large:
+Aborts the request if the really-big-file is too large (aborted requests have status nil and body nil):
 
     (client/get "http://site.com/really-big-file.mpg" {:http-params {content/limit 100000}})
 
