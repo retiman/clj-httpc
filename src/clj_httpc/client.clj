@@ -6,7 +6,7 @@
   (:require
     [clj-httpc.core :as core]
     [clj-httpc.content :as content]
-    [clj-httpc.util :as util]
+    [clj-httpc.utils :as utils]
     [clojure.contrib.string :as str])
   (:import
     [java.net URL]
@@ -50,9 +50,9 @@
             resp-c (client req)]
         (case (get-in resp-c [:headers "Content-Encoding"])
           "gzip"
-            (update resp-c :body util/gunzip)
+            (update resp-c :body utils/gunzip)
           "deflate"
-            (update resp-c :body util/inflate)
+            (update resp-c :body utils/inflate)
           resp-c)))))
 
 (defn wrap-output-coercion [client]
@@ -72,7 +72,7 @@
 (defn wrap-input-coercion [client]
   (fn [{:keys [body] :as req}]
     (if (string? body)
-      (client (-> req (assoc :body (util/utf8-bytes body)
+      (client (-> req (assoc :body (utils/utf8-bytes body)
                              :character-encoding "UTF-8")))
       (client req))))
 
@@ -109,8 +109,8 @@
 
 (defn generate-query-string [params]
   (str/join "&"
-    (map (fn [[k v]] (str (util/url-encode (name k)) "="
-                          (util/url-encode (str v))))
+    (map (fn [[k v]] (str (utils/url-encode (name k)) "="
+                          (utils/url-encode (str v))))
          params)))
 
 (defn wrap-query-params [client]
@@ -123,7 +123,7 @@
 
 (defn basic-auth-value [user password]
   (str "Basic "
-       (util/base64-encode (util/utf8-bytes (str user ":" password)))))
+       (utils/base64-encode (utils/utf8-bytes (str user ":" password)))))
 
 (defn wrap-basic-auth [client]
   (fn [req]
@@ -185,32 +185,32 @@
   [url & [req]]
   (try
     (request (merge req {:method :get :url url}))
-    (catch Exception e (util/create-error-response url e))))
+    (catch Exception e (utils/create-error-response url e))))
 
 (defn head
   "Like #'request, but sets the :method and :url as appropriate."
   [url & [req]]
   (try
     (request (merge req {:method :head :url url}))
-    (catch Exception e (util/create-error-response url e))))
+    (catch Exception e (utils/create-error-response url e))))
 
 (defn post
   "Like #'request, but sets the :method and :url as appropriate."
   [url & [req]]
   (try
     (request (merge req {:method :post :url url}))
-    (catch Exception e (util/create-error-response url e))))
+    (catch Exception e (utils/create-error-response url e))))
 
 (defn put
   "Like #'request, but sets the :method and :url as appropriate."
   [url & [req]]
   (try
     (request (merge req {:method :put :url url}))
-    (catch Exception e (util/create-error-response url e))))
+    (catch Exception e (utils/create-error-response url e))))
 
 (defn delete
   "Like #'request, but sets the :method and :url as appropriate."
   [url & [req]]
   (try
     (request (merge req {:method :delete :url url}))
-    (catch Exception e (util/create-error-response url e))))
+    (catch Exception e (utils/create-error-response url e))))

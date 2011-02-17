@@ -1,4 +1,4 @@
-(ns clj-httpc.util
+(ns clj-httpc.utils
   "Helper functions for the HTTP client."
   (:require
     [clojure.contrib.logging :as log])

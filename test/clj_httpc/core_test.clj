@@ -4,7 +4,7 @@
   (:require
     [clj-httpc.content :as content]
     [clj-httpc.core :as core]
-    [clj-httpc.util :as util]
+    [clj-httpc.utils :as utils]
     [clojure.contrib.pprint :as pp]
     [clojure.contrib.io :as io]))
 
@@ -50,7 +50,7 @@
    :server-port 8080})
 
 (def http-client
-  (util/create-http-client))
+  (utils/create-http-client))
 
 (defn request [req]
   (core/with-http-client
@@ -87,7 +87,7 @@
 
 (deftest sends-and-returns-byte-array-body
   (let [resp (request {:request-method :post :uri "/post"
-                       :body (util/utf8-bytes "contents")})]
+                       :body (utils/utf8-bytes "contents")})]
     (is (= 200 (:status resp)))
     (is (= "contents\n" (slurp-body resp)))))
 

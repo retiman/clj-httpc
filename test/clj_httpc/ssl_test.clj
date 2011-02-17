@@ -1,7 +1,7 @@
 (ns clj-httpc.ssl-test
   (:use
     [clojure.test]
-    [clj-httpc.util])
+    [clj-httpc.utils])
   (:require
     [clj-httpc.client :as client]
     [clj-httpc.core :as core])

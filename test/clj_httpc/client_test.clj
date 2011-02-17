@@ -4,7 +4,7 @@
   (:require
     [clj-httpc.client :as client]
     [clj-httpc.content :as content]
-    [clj-httpc.util :as util])
+    [clj-httpc.utils :as utils])
   (:import
     [java.nio.charset Charset]
     [java.util Arrays]))
@@ -69,18 +69,18 @@
     (is (= "ok" (:body resp)))))
 
 (deftest apply-on-compressed
-  (let [client (fn [req] {:body (util/gzip (util/utf8-bytes "foofoofoo"))
+  (let [client (fn [req] {:body (utils/gzip (utils/utf8-bytes "foofoofoo"))
                           :headers {"Content-Encoding" "gzip"}})
         c-client (client/wrap-decompression client)
         resp (c-client {})]
-    (is (= "foofoofoo" (util/utf8-string (:body resp))))))
+    (is (= "foofoofoo" (utils/utf8-string (:body resp))))))
 
 (deftest apply-on-deflated
-  (let [client (fn [req] {:body (util/deflate (util/utf8-bytes "barbarbar"))
+  (let [client (fn [req] {:body (utils/deflate (utils/utf8-bytes "barbarbar"))
                           :headers {"Content-Encoding" "deflate"}})
         c-client (client/wrap-decompression client)
         resp (c-client {})]
-    (is (= "barbarbar" (util/utf8-string (:body resp))))))
+    (is (= "barbarbar" (utils/utf8-string (:body resp))))))
 
 (deftest pass-on-non-compressed
   (let [c-client (client/wrap-decompression (fn [req] {:body "foo"}))
@@ -106,7 +106,7 @@
     {:uri "/foo"}))
 
 (deftest apply-on-output-coercion
-  (let [client (fn [req] {:body (util/utf8-bytes "foo")})
+  (let [client (fn [req] {:body (utils/utf8-bytes "foo")})
         o-client (client/wrap-output-coercion client)
         resp (o-client {:uri "/foo"})]
     (is (= "foo" (:body resp))))
@@ -144,11 +144,11 @@
   (let [i-client (client/wrap-input-coercion identity)
         resp (i-client {:body "foo"})]
     (is (= "UTF-8" (:character-encoding resp)))
-    (is (Arrays/equals (util/utf8-bytes "foo") (:body resp)))))
+    (is (Arrays/equals (utils/utf8-bytes "foo") (:body resp)))))
 
 (deftest pass-on-no-input-coercion
   (is-passed client/wrap-input-coercion
-    {:body (util/utf8-bytes "foo")}))
+    {:body (utils/utf8-bytes "foo")}))
 
 (deftest apply-on-content-type
   (is-applied client/wrap-content-type

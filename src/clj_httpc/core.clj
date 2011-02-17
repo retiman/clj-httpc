@@ -1,7 +1,7 @@
 (ns clj-httpc.core
   "Core HTTP request/response implementation."
   (:use
-    [clj-httpc.util])
+    [clj-httpc.utils])
   (:require
     [clj-httpc.content :as content]
     [clojure.contrib.logging :as log])
