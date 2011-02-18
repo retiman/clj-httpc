@@ -1,8 +1,8 @@
 (ns clj-httpc.content
   "Utilities for content type handling."
   (:require
-    [clojure.contrib.logging :as log]
-    [clojure.contrib.str-utils2 :as su])
+    [clojure.string :as s]
+    [clojure.contrib.logging :as log])
   (:import
     [java.nio.charset Charset UnsupportedCharsetException]
     [org.apache.http HttpResponse]
@@ -67,8 +67,8 @@
   [headers]
   (if (contains? headers "Accept")
     (let [accept-value (get headers "Accept")
-          content-types (su/split accept-value #",")]
-      (map #(create-content-type (su/trim %)) content-types))
+          content-types (s/split accept-value #",")]
+      (map #(create-content-type (s/trim %)) content-types))
     (list (ContentType. "*/*"))))
 
 (defn matches?
