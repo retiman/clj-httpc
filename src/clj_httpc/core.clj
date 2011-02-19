@@ -21,8 +21,9 @@
 
 (defvar- redirect-locations DefaultRedirectStrategy/REDIRECT_LOCATIONS)
 
-(defn- parse-headers [#^HttpResponse http-resp]
+(defn- parse-headers
   "Parse headers from a hash."
+  [#^HttpResponse http-resp]
   (into {} (map (fn [#^Header h] [(.toLowerCase (.getName h)) (.getValue h)])
                 (iterator-seq (.headerIterator http-resp)))))
 
