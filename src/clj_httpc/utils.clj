@@ -3,7 +3,7 @@
   (:require
     [clojure.contrib.logging :as log])
   (:import
-    [clj_httpc TrustEveryoneSSLSocketFactory LoggingRedirectStrategy]
+    [clj_httpc TrustEveryoneSSLSocketFactory]
     [java.net URI URLEncoder]
     [java.io ByteArrayInputStream ByteArrayOutputStream]
     [java.util.zip InflaterInputStream DeflaterInputStream]
@@ -137,12 +137,10 @@
   ([http-params scheme-registry]
     (let [manager (ThreadSafeClientConnManager. http-params scheme-registry)
           client (DefaultHttpClient. manager http-params)]
-      (.setRedirectStrategy client (LoggingRedirectStrategy.))
       client))
   ([]
     (let [client (create-http-client (create-http-params)
                                      (create-scheme-registry))]
-      (.setRedirectStrategy client (LoggingRedirectStrategy.))
       client)))
 
 (defn create-http-url

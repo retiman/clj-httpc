@@ -1,22 +1,25 @@
 (ns clj-httpc.core
   "Core HTTP request/response implementation."
   (:use
+    [clojure.contrib.def]
     [clj-httpc.utils])
   (:require
     [clj-httpc.content :as content]
     [clojure.contrib.logging :as log])
   (:import
-    [clj_httpc EntityUtils LoggingRedirectStrategy]
+    [clj_httpc EntityUtils]
     [java.io InterruptedIOException]
     [java.net SocketException UnknownHostException]
     [org.apache.http HttpEntityEnclosingRequest HttpResponse Header]
     [org.apache.http.client ClientProtocolException HttpClient]
     [org.apache.http.client.methods HttpUriRequest]
     [org.apache.http.entity ByteArrayEntity]
-    [org.apache.http.impl.client DefaultHttpClient]
+    [org.apache.http.impl.client DefaultHttpClient DefaultRedirectStrategy]
     [org.apache.http.protocol HttpContext BasicHttpContext]))
 
 (def #^HttpClient *http-client* (DefaultHttpClient.))
+
+(defvar- redirect-locations DefaultRedirectStrategy/REDIRECT_LOCATIONS)
 
 (defn- parse-headers [#^HttpResponse http-resp]
   "Parse headers from a hash."
@@ -24,11 +27,10 @@
                 (iterator-seq (.headerIterator http-resp)))))
 
 (defn- parse-redirects
-  "Gets the redirects from the LoggingRedirectStrategy."
-  [redirect-strategy http-context]
-  (if (= (type redirect-strategy) LoggingRedirectStrategy)
-    (into #{} (.getURIs redirect-strategy http-context))
-    nil))
+  "Gets the redirects from the HttpContext."
+  [http-context]
+  (let [uris (.getAttribute http-context redirect-locations)]
+    (if uris (.getAll uris) #{})))
 
 (defn- abort-request?
   "Aborts the request if content types don't match or if the content length is
@@ -63,7 +65,6 @@
                                   uri)
         http-context #^HttpContext (BasicHttpContext.)
         http-req #^HttpUriRequest (create-http-request request-method http-url)
-        redirect-strategy (.getRedirectStrategy *http-client*)
         resp (create-http-response http-url)]
     (try
       ; Add content-type and character encoding
@@ -99,29 +100,24 @@
         (assoc (timestamp resp)
                :status status
                :headers (parse-headers http-resp)
-               :redirects (parse-redirects redirect-strategy http-context)
+               :redirects (parse-redirects http-context)
                :exception (if abort?
                             (InterruptedIOException. "Request aborted."))
                :body body))
       (catch UnknownHostException e
-        (create-error-response
-          resp (parse-redirects redirect-strategy http-context) e))
+        (create-error-response resp (parse-redirects http-context) e))
       (catch SocketException e
-        (create-error-response
-          resp (parse-redirects redirect-strategy http-context) e :status 408))
+        (create-error-response resp (parse-redirects http-context) e :status 408))
       (catch InterruptedIOException e
-        (create-error-response
-          resp (parse-redirects redirect-strategy http-context) e))
+        (create-error-response resp (parse-redirects http-context) e))
       (catch ClientProtocolException e
         ; ClientProtocolException wraps other exceptions.  The String version of
         ; the constructor is rarely used, so giving the user back the cause of
         ; the exception is usually more useful.
-        (assoc (create-error-response
-                 resp (parse-redirects redirect-strategy http-context) e)
+        (assoc (create-error-response resp (parse-redirects http-context) e)
                :exception (if (.getCause e) (.getCause e) e)))
       (catch Exception e
-        (create-error-response
-          resp (parse-redirects redirect-strategy http-context) e))
+        (create-error-response resp (parse-redirects http-context) e))
       (finally
         ; It is harmless to abort a request that has completed, and in some
         ; cases will be required to release resources.  However, abort could
