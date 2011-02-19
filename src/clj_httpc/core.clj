@@ -25,9 +25,9 @@
 
 (defn- parse-redirects
   "Gets the redirects from the LoggingRedirectStrategy."
-  [redirect-strategy]
+  [redirect-strategy http-context]
   (if (= (type redirect-strategy) LoggingRedirectStrategy)
-    (into #{} (.getURIs redirect-strategy))
+    (into #{} (.getURIs redirect-strategy http-context))
     nil))
 
 (defn- abort-request?
@@ -99,25 +99,29 @@
         (assoc (timestamp resp)
                :status status
                :headers (parse-headers http-resp)
-               :redirects (parse-redirects redirect-strategy)
+               :redirects (parse-redirects redirect-strategy http-context)
                :exception (if abort?
                             (InterruptedIOException. "Request aborted."))
                :body body))
       (catch UnknownHostException e
-        (create-error-response resp (parse-redirects redirect-strategy) e))
+        (create-error-response
+          resp (parse-redirects redirect-strategy http-context) e))
       (catch SocketException e
-        (create-error-response resp (parse-redirects redirect-strategy) e
-                               :status 408))
+        (create-error-response
+          resp (parse-redirects redirect-strategy http-context) e :status 408))
       (catch InterruptedIOException e
-        (create-error-response resp (parse-redirects redirect-strategy) e))
+        (create-error-response
+          resp (parse-redirects redirect-strategy http-context) e))
       (catch ClientProtocolException e
         ; ClientProtocolException wraps other exceptions.  The String version of
         ; the constructor is rarely used, so giving the user back the cause of
         ; the exception is usually more useful.
-        (assoc (create-error-response resp (parse-redirects redirect-strategy) e)
+        (assoc (create-error-response
+                 resp (parse-redirects redirect-strategy http-context) e)
                :exception (if (.getCause e) (.getCause e) e)))
       (catch Exception e
-        (create-error-response resp (parse-redirects redirect-strategy) e))
+        (create-error-response
+          resp (parse-redirects redirect-strategy http-context) e))
       (finally
         ; It is harmless to abort a request that has completed, and in some
         ; cases will be required to release resources.  However, abort could
