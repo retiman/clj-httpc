@@ -135,13 +135,10 @@
 (defn create-http-client
   "Create an http-client."
   ([http-params scheme-registry]
-    (let [manager (ThreadSafeClientConnManager. http-params scheme-registry)
-          client (DefaultHttpClient. manager http-params)]
-      client))
+    (let [manager (ThreadSafeClientConnManager. http-params scheme-registry)]
+      (DefaultHttpClient. manager http-params)))
   ([]
-    (let [client (create-http-client (create-http-params)
-                                     (create-scheme-registry))]
-      client)))
+    (create-http-client (create-http-params) (create-scheme-registry))))
 
 (defn create-http-url
   "Create the URI as a String."
