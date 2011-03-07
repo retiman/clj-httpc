@@ -7,7 +7,7 @@
     [clj-httpc.core :as core]
     [clj-httpc.content :as content]
     [clj-httpc.utils :as utils]
-    [clojure.contrib.string :as str])
+    [clojure.string :as s])
   (:import
     [java.net URL]
     [java.nio.charset Charset]
@@ -97,7 +97,7 @@
       (client req))))
 
 (defn accept-encoding-value [accept-encoding]
-  (str/join ", " (map name accept-encoding)))
+  (s/join ", " (map name accept-encoding)))
 
 (defn wrap-accept-encoding [client]
   (fn [{:keys [accept-encoding] :as req}]
@@ -108,7 +108,7 @@
       (client req))))
 
 (defn generate-query-string [params]
-  (str/join "&"
+  (s/join "&"
     (map (fn [[k v]] (str (utils/url-encode (name k)) "="
                           (utils/url-encode (str v))))
          params)))
