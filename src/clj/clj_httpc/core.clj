@@ -7,19 +7,21 @@
     [clj-httpc.content :as content]
     [clojure.contrib.logging :as log])
   (:import
-    [clj_httpc EntityUtils]
+    [clj_httpc CustomRedirectStrategy EntityUtils]
     [java.io InterruptedIOException]
     [java.net SocketException UnknownHostException]
     [org.apache.http HttpEntityEnclosingRequest HttpResponse Header]
     [org.apache.http.client ClientProtocolException HttpClient]
     [org.apache.http.client.methods HttpUriRequest]
     [org.apache.http.entity ByteArrayEntity]
-    [org.apache.http.impl.client DefaultHttpClient DefaultRedirectStrategy]
+    [org.apache.http.impl.client DefaultHttpClient]
     [org.apache.http.protocol HttpContext BasicHttpContext]))
 
-(def #^HttpClient *http-client* (DefaultHttpClient.))
+(def #^HttpClient *http-client*
+  (doto (DefaultHttpClient.)
+    (.setRedirectStrategy (CustomRedirectStrategy.))))
 
-(defvar- redirect-locations DefaultRedirectStrategy/REDIRECT_LOCATIONS)
+(defvar- redirect-locations CustomRedirectStrategy/REDIRECT_LOCATIONS)
 
 (defn- parse-headers
   "Parse headers from a hash."
@@ -30,8 +32,10 @@
 (defn- parse-redirects
   "Gets the redirects from the HttpContext."
   [http-context]
-  (let [uris (.getAttribute http-context redirect-locations)]
-    (if uris (.getAll uris) #{})))
+  (let [locations (.getAttribute http-context redirect-locations)]
+    (if locations
+      (vec (map #(vector (.getURI %) (.getStatus %))
+                (.getAllRedirects locations))))))
 
 (defn- abort-request?
   "Aborts the request if content types don't match or if the content length is

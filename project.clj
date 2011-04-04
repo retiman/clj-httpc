@@ -2,7 +2,8 @@
   :description
     "An idiomatic Clojure http client thinly wrapping the Apache client"
   :min-lein-version "1.4.2"
-  :java-source-path "src"
+  :java-source-path "src/java"
+  :source-path "src/clj"
   :warn-on-reflection true
   :repositories
     {"clojars" "http://clojars.org/repo"
