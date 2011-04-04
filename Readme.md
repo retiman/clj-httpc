@@ -84,12 +84,14 @@ Use your own Commons HttpClient instance if you want to.  For example, in case y
 
     ; The following code is in util/create-http-client, but you can modify it to
     ; suit your needs.
+    (import clj_httpc.CustomRedirectStrategy)
+
     (def http-client
       (let [http-params (util/create-http-params)
             scheme-registry (util/create-scheme-registry)
             manager (ThreadSafeClientConnManager. http-params scheme-registry)
             client (DefaultHttpClient. manager http-params)]
-        (.setRedirectStrategy client (LoggingRedirectStrategy.))))
+        (.setRedirectStrategy client (CustomRedirectStrategy.))))
 
     (with-http-client http-client
       (fn [_]
@@ -107,6 +109,10 @@ The client will not throw exceptions on exceptional status codes:
     => Exception: 500
 
 The client will also follow redirects on the appropriate `30*` status codes.
+
+    (client/get "http://www.duck.com")
+    => {:redirects [[#<URI http://www.google.com/> 302]]
+        ...}
 
 The client transparently accepts and decompresses the `gzip` and `deflate` content encodings.
 
