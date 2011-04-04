@@ -36,7 +36,7 @@ The client supports simple `get`, `head`, `put`, `post`, and `delete` requests. 
         :end-time 1295562743953
         :time 153
         :exception nil
-        :redirects #{#<URI http://www.google.com/>}
+        :redirects [[#<URI http://www.google.com/> 302]]
         :headers {"date" "Sun, 01 Aug 2010 07:03:49 GMT"
                   "cache-control" "private, max-age=0"
                   "content-type" "text/html; charset=ISO-8859-1"
