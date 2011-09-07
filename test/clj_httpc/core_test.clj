@@ -58,7 +58,8 @@
     #(core/request (merge base-req req))))
 
 (defn slurp-body [req]
-  (io/slurp* (:body req)))
+  (if-let [body (:body req)]
+    (io/slurp* body)))
 
 (deftest makes-get-request
   (let [resp (request {:request-method :get :uri "/get"})]

@@ -11,7 +11,9 @@
   :dependencies
     [[org.clojure/clojure "1.2.0"]
      [org.clojure/clojure-contrib "1.2.0"]
-     [org.apache.httpcomponents/httpclient "4.1"]
+     [org.apache.httpcomponents/httpclient "4.1.2"
+       :exclusions [org.apache.httpcomponents/httpcore]]
+     [org.apache.httpcomponents/httpcore "4.1.3"]
      [log4j "1.2.15" :exclusions
        [javax.mail/mail
         javax.jms/jms
