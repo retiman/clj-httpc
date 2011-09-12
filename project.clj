@@ -1,4 +1,4 @@
-(defproject clj-httpc "1.7.1-1"
+(defproject clj-httpc "1.7.1-2"
   :description
     "An idiomatic Clojure http client thinly wrapping the Apache client"
   :min-lein-version "1.4.2"
@@ -25,6 +25,7 @@
      [com.google.gdata/gdata-core-1.0 "1.36.0"]]
   :dev-dependencies
     [[lein-javac "1.2.1-SNAPSHOT"]
+     [lein-clojars "0.6.0"]
      [swank-clojure "1.2.1"]
      [autodoc "0.7.1"]
      [robert/hooke "1.1.0"]
