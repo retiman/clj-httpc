@@ -34,7 +34,7 @@ namespace.
     <a class="wiki_link" href="api-index.html">API Index</a><br />
     <a class="wiki_link" href="#">Namespaces:</a>
     <ul id="left-sidebar-list">
-      <li><a href="clj-httpc.client-api.html" class="wiki_link">clj-httpc.client</a></li><li><a href="clj-httpc.content-api.html" class="wiki_link">clj-httpc.content</a></li><li><a href="clj-httpc.core-api.html" class="wiki_link">clj-httpc.core</a></li><li><a href="clj-httpc.util-api.html" class="wiki_link">clj-httpc.util</a></li>
+      <li><a href="clj-httpc.client-api.html" class="wiki_link">clj-httpc.client</a></li><li><a href="clj-httpc.content-api.html" class="wiki_link">clj-httpc.content</a></li><li><a href="clj-httpc.core-api.html" class="wiki_link">clj-httpc.core</a></li><li><a href="clj-httpc.utils-api.html" class="wiki_link">clj-httpc.utils</a></li>
     </ul>
   </div>
 </div>
@@ -90,13 +90,8 @@ by <span id="author">Unknown</span><br />
   <span id="var-type">function</span><br />
   <pre id="var-usage">Usage: (create-content-type text)
 </pre>
-  <pre id="var-docstr">This is a big kludge and I'm not sure where else to put this, or if it
-should be included at all.  Sometimes web servers will return invalid
-Content-Type headers.  For example, instead of 'text/plain', they might
-return 'text'.  The ContentType constructor will not allow these and
-matches-acceptable? will fail.
-
-TODO: Figure out a better place to put this or don't handle it at all.</pre>
+  <pre id="var-docstr">Create a ContentType object from the Content-Type header; we'll allow
+some kludge to default to sensible types.</pre>
   
 </div><div id="var-entry">
   <br />
