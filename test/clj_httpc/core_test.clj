@@ -8,6 +8,9 @@
     [clojure.contrib.pprint :as pp]
     [clojure.contrib.io :as io]))
 
+(def large-body
+  (apply str (repeat 1000 \x)))
+
 (defn handler [req]
   (pp/pprint req)
   (println) (println)
@@ -31,11 +34,13 @@
     [:get "/content-type"]
       {:status 200 :body (:content-type req)}
     [:get "/content"]
-      {:status 200 :body "hello" :headers {"Content-Type" "text/plain"
-                                           "Content-Length" "1000"}}
+      {:status 200
+       :body large-body
+       :headers {"Content-Type" "text/plain"
+                 "Content-Length" "1000"}}
     [:get "/content-large"]
       {:status 200
-       :body (apply str (repeat 10000 0))
+       :body (apply str (repeat 10000 \x))
        :headers {"Content-Type" "text/plain"}}
     [:get "/header"]
       {:status 200 :body (get-in req [:headers "x-my-header"])}
@@ -112,7 +117,7 @@
                        :request-method :get
                        :uri "/content"
                        :headers {"Accept" "text/*"}})]
-    (is (= "hello\n" (slurp-body resp)))))
+    (is (= large-body (slurp-body resp)))))
 
 (deftest aborts-on-content-length-over-limit
   (do
@@ -132,11 +137,11 @@
     (let [resp (request {:http-params {content/limit 1000}
                          :request-method :get
                          :uri "/content"})]
-      (is (= "hello\n" (slurp-body resp))))
+      (is (= large-body (slurp-body resp))))
     (let [resp (request {:http-params {content/limit 1001}
                          :request-method :get
                          :uri "/content"})]
-      (is (= "hello\n" (slurp-body resp))))))
+      (is (= large-body (slurp-body resp))))))
 
 (deftest follows-redirects
   (let [resp (request {:request-method :get
