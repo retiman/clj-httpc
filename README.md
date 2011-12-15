@@ -1,12 +1,16 @@
-# `clj-httpc`
+DESCRIPTION
+===========
 
-A Clojure HTTP library thinly wrapping the [Apache HttpComponents](http://hc.apache.org/) client.  This repository is forked from [clj-http](http://hc.apache.org); it will try to allow you to access the wrapped HttpComponents library if you need to.
+A Clojure HTTP library thinly wrapping the [Apache HttpComponents](http://hc.apache.org/) client.  This repository is forked from the old `clj-http` library (which no longer exists).  One main differences is that this library gives you access to the underlying HttpComponents library if you wanted it, and it is easier to set up persistent connections.  The new (as of version `0.2.6`) [clj-http](https://github.com/dakrone/clj-http) has persistent connections; please consider using it.
+
+This library uses Clojure 1.2.0, and I do not expect to update it for 1.3.0.
 
 Thanks go to the [clj-sys](https://github.com/clj-sys) guys for writing the original implementation.
 
 NOTE: ALL APIs ARE SUBJECT TO CHANGE WITHOUT NOTICE.
 
-## Features
+FEATURES
+========
 
 These features are added on top of `clj-http`:
 
@@ -17,7 +21,8 @@ These features are added on top of `clj-http`:
 - Allows thread safe re-use a single instance of HttpClient
 - Correctly handles non-UTF-8 charsets in response Content-Type
 
-## Usage
+USAGE
+=====
 
 The main HTTP client functionality is provided by the `clj-httpc.client` namespace:
 
@@ -116,20 +121,8 @@ The client will also follow redirects on the appropriate `30*` status codes.
 
 The client transparently accepts and decompresses the `gzip` and `deflate` content encodings.
 
-## Installation
-
-`clj-httpc` is available as a Maven artifact from [Clojars](http://clojars.org/clj-httpc):
-
-    :dependencies
-      [[clj-httpc "0.1.1"] ...]
-
-## Design
-
-The design of `clj-httpc` is inspired by the [Ring](http://github.com/mmcgrana/ring) protocol for Clojure HTTP server applications.
-
-The client in `clj-httpc.core` makes HTTP requests according to a given Ring request map and returns Ring response maps corresponding to the resulting HTTP response. The function `clj-httpc.client/request` uses Ring-style middleware to layer functionality over the core HTTP request/response implementation. Methods like `clj-httpc.client/get` are sugar over this `clj-httpc.client/request` function.
-
-## Development
+DEVELOPMENT
+===========
 
 To run the tests:
 
@@ -137,6 +130,7 @@ To run the tests:
     $ lein run -m clj-httpc.run-server
     $ lein test
 
-## License
+LICENSE
+=======
 
 Released under the MIT License: <http://www.opensource.org/licenses/mit-license.php>
