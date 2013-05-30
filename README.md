@@ -7,7 +7,7 @@ This library uses Clojure 1.2.0, and I do not expect to update it for 1.3.0.
 
 Thanks go to the [clj-sys](https://github.com/clj-sys) guys for writing the original implementation.
 
-NOTE: ALL APIs ARE SUBJECT TO CHANGE WITHOUT NOTICE.
+THIS PROEJCT IS DEPRECATED [clj-http](https://github.com/dakrone/clj-http) INSTEAD.
 
 FEATURES
 ========
